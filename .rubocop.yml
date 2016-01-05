@@ -1,0 +1,12 @@
+LineLength:
+  Max: 250
+Documentation:
+  Enabled: false
+MethodLength:
+  Enabled: false
+CyclomaticComplexity:
+  Enabled: false
+AbcSize:
+  Enabled: false
+PerceivedComplexity:
+  Enabled: false

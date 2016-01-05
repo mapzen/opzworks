@@ -11,7 +11,7 @@ module OpzWorks
   class Commands
     class BERKS
       def self.banner
-        'Update stack json'
+        'Build the  stack berkshelf'
       end
 
       def self.run

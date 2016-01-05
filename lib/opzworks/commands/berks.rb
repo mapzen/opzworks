@@ -26,7 +26,7 @@ module OpzWorks
 
             Options:
           EOS
-          opt :update, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', short: 'u', default: true
+          opt :update, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: true
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 

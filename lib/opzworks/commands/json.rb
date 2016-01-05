@@ -15,7 +15,7 @@ module OpzWorks
       end
 
       def self.run
-        Trollop.options do
+        options = Trollop.options do
           banner <<-EOS.unindent
             #{JSON.banner}
 
@@ -26,6 +26,7 @@ module OpzWorks
 
             Options:
           EOS
+          opt :quiet, 'Update the stack json without confirmation', short: 'q', default: false
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
@@ -53,18 +54,29 @@ module OpzWorks
           if diff_str.empty?
             puts 'There are no differences between the existing stack json and the json you\'re asking to push.'.foreground(:yellow)
           else
-            puts "The following is a partial diff of the existing stack json and the json you're asking to push:".foreground(:yellow)
-            puts diff_str
-            STDOUT.print "\nType ".foreground(:yellow) + 'yes '.foreground(:blue) + 'to continue, any other key will abort: '.foreground(:yellow)
-            input = STDIN.gets.chomp
-            if input =~ /(^yes$|^Y$)/
+            if options[:quiet]
+              puts "Quiet mode detected. Pushing the following updated json:".foreground(:yellow)
+              puts diff_str
+
               hash = {}
               hash[:stack_id] = @stack_id
               hash[:custom_json] = json
 
               client.update_stack(hash)
             else
-              puts 'Update skipped.'.foreground(:red)
+              puts "The following is a partial diff of the existing stack json and the json you're asking to push:".foreground(:yellow)
+              puts diff_str
+              STDOUT.print "\nType ".foreground(:yellow) + 'yes '.foreground(:blue) + 'to continue, any other key will abort: '.foreground(:yellow)
+              input = STDIN.gets.chomp
+              if input =~ /(^yes$|^Y$)/
+                hash = {}
+                hash[:stack_id] = @stack_id
+                hash[:custom_json] = json
+
+                client.update_stack(hash)
+              else
+                puts 'Update skipped.'.foreground(:red)
+              end
             end
           end
         end

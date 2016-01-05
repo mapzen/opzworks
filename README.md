@@ -24,8 +24,7 @@ Run `opzworks` with one of the following commands:
 
 * `ssh`: generate and update SSH configuration files.
 
-  Every stack will be iterated over to generate the config. Host names are
-  based off the stack naming convention, `project_name::env::region`
+  Host names are based off the stack naming convention, `project_name::env::region`
 
   For example, if we have a host 'api1' in the stack apiaxle::prod::us-east, the
   resultant hostname will be `api1-apiaxle-prod-us-east`

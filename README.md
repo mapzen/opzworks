@@ -48,6 +48,10 @@ Run `opzworks` with one of the following commands:
     opzworks ssh >>~/.ssh/config
     ```
 
+  Note this example assumes the use of a gnu sed-like utility, which on OSX means
+  installing gnu sed (`brew install gsed` if you're using homebrew). On Linux, simply
+  change `gsed` to `sed`.
+
   Add the following line to the bottom of your existing ~/.ssh/config:
 
     `# OPSWORKS_CRON_LINE_MATCH`

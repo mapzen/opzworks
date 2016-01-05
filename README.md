@@ -41,14 +41,20 @@ Run `opzworks` with one of the following commands:
 
 ## Configuration
 
-This gem assumes a stack naming convention of `project_name::env::region`, e.g
+The gem reads information from `~/.aws/config`, or from the file referenced by
+the `AWS_CONFIG_FILE` environment variable. It should already look something like this:
 
-  awesomeapp::prod::us-east
-  awesomeapp::dev::us-east
-  elasticsearch::dev::us-west
+    [default]
+    aws_access_key_id     = ilmiochiaveID
+    aws_secret_access_key = ilmiochiavesegreto
+    region                = us-east-1
+    output                = json
 
-Add the following section to `~/.aws/config` or to the file pointed out by the
-`AWS_CONFIG_FILE` environment variable:
+If you want the gem to read from an environment other than 'default', you can do so
+by exporting the `AWS_PROFILE` environment variable. It should be set to whatever profile
+name you have defined that you want to use in the config file.
+
+Add the following section to `~/.aws/config`:
 
     [opzworks]
     ssh-user-name         = <MY SSH USER NAME>

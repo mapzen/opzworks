@@ -34,6 +34,23 @@ Run `opzworks` with one of the following commands:
 
     `opzworks ssh myproject::prod`
 
+  If you wanted to automatically scrape all your stacks to populate your ssh config, you could do
+  something like:
+
+  Add a crontab entry similar to: `0 * * * * /bin/bash -l -c /path/to/opzworks-ssh.sh`
+  Create `/path/to/opzworks-ssh.sh`:
+
+    ```bash
+    # this script reads .ssh/config, drops anything after the matched line,
+    #   then generates a list of opsworks hosts and appends them to the file.
+    gsed -i '/OPSWORKS_CRON_LINE_MATCH/q' ~/.ssh/config
+    opzworks ssh >>~/.ssh/config
+    ```
+
+  Add the following line to the bottom of your existing ~/.ssh/config:
+
+    `# OPSWORKS_CRON_LINE_MATCH`
+
 * `json`: update stack custom JSON.
 
 * `berks`: build the berkshelf for a stack, upload the tarball to S3, trigger

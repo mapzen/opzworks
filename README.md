@@ -40,6 +40,7 @@ Run `opzworks` with one of the following commands:
   Update stack custom JSON.
 
 * `berks`
+
   Build the berkshelf for a stack, upload the tarball to S3, trigger
   `update_custom_cookbooks` on the stack.
 

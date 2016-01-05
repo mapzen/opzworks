@@ -25,10 +25,10 @@ Run `opzworks` with one of the following commands:
 * `ssh` Generate and update SSH configuration files.
 
   Every stack will be iterated over to generate the config. Host names are
-  based off the stack naming convention, `project_name::env::region`.
+  based off the stack naming convention, `project_name::env::region`
 
   For example, if we have a host 'api1' in the stack apiaxle::prod::us-east, the
-  resultant hostname will be `api1-apiaxle-prod-us-east`.
+  resultant hostname will be `api1-apiaxle-prod-us-east`
 
   By default, `opsworks ssh` will iterate over all stacks. If you wish to restrict the stacks
   it searches, simply pass the stack name (or a partial match) as an argument:
@@ -45,7 +45,7 @@ Run `opzworks` with one of the following commands:
 
 ## Configuration
 
-This gem assumes a stack naming convention of `project_name::env::region`, e.g.
+This gem assumes a stack naming convention of `project_name::env::region`, e.g
 
   awesomeapp::prod::us-east
   awesomeapp::dev::us-east

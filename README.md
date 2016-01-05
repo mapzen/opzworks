@@ -34,8 +34,9 @@ Run `opzworks` with one of the following commands:
 
     `opzworks ssh myproject::prod`
 
-  If you wanted to automatically scrape all your stacks to populate your ssh config, you could do
-  something like:
+  If you wanted to automatically scrape all your stacks to populate your ssh config, and
+  you don't want to use the --update flag (which will overwrite the entire file contents),
+  you could do something like:
 
   Add a crontab entry similar to: `0 * * * * /bin/bash -l -c /path/to/opzworks-ssh.sh`
   Create `/path/to/opzworks-ssh.sh`:

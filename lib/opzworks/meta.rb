@@ -1,7 +1,7 @@
 module OpzWorks
-  VERSION     = '0.0.1'
+  VERSION     = '0.1.0'
   AUTHORS     = ['Grant Heffernan']
-  EMAIL       = ['grant@mapzen.com']
+  EMAIL       = ['heffergm@gmail.com']
   DESCRIPTION = 'OpzWorks Utilities'
   SUMMARY     = 'Command line interface for Amazon OpsWorks'
 end

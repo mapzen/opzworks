@@ -98,6 +98,8 @@ built. Defaults to /tmp.
 
 ## Setup Conventions/Workflow
 
+![workflow](img/flow.png)
+
 This gem makes a number of assumptions in order to enforce a specific workflow. First among them is
 the Opsworks stack naming convection. This will need to adhere toe the following format:
 

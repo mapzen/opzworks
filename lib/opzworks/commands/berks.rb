@@ -1,6 +1,5 @@
 require 'aws-sdk'
 require 'trollop'
-require 'diffy'
 require 'opzworks'
 require 'rainbow/ext/string'
 

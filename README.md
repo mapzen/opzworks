@@ -22,7 +22,7 @@ To use the gem in a project, add `gem 'opzworks'` to your Gemfile, and then exec
 
 Run `opzworks` with one of the following commands:
 
-* `ssh` Generate and update SSH configuration files.
+* `ssh`: generate and update SSH configuration files.
 
   Every stack will be iterated over to generate the config. Host names are
   based off the stack naming convention, `project_name::env::region`
@@ -35,13 +35,9 @@ Run `opzworks` with one of the following commands:
 
     `opzworks ssh myproject::prod`
 
-* `json`
-  
-  Update stack custom JSON.
+* `json`: update stack custom JSON.
 
-* `berks`
-
-  Build the berkshelf for a stack, upload the tarball to S3, trigger
+* `berks`: build the berkshelf for a stack, upload the tarball to S3, trigger
   `update_custom_cookbooks` on the stack.
 
 ## Configuration

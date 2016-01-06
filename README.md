@@ -22,6 +22,8 @@ Then run `opzworks --help`
 
 To use the gem in a project, add `gem 'opzworks'` to your Gemfile, and then execute: `bundle`
 
+To build locally from this repository: `rake install`
+
 ## Commands
 
 Run `opzworks` with one of the following commands:

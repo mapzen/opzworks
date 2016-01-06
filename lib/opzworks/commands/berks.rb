@@ -18,7 +18,7 @@ module OpzWorks
           banner <<-EOS.unindent
             #{BERKS.banner}
 
-              opzworks berks stack1 stack2 stack3
+              opzworks berks stack1 stack2 ...
 
             The stack name can be passed as any unique regex. If there is
             more than one match, it will simply be skipped.

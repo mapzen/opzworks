@@ -17,6 +17,11 @@ module OpzWorks
           banner <<-EOS.unindent
             #{SSH.banner}
 
+              opzworks ssh {stack1} {stack2} {...}
+
+            The stack name can be passed as any unique regex. If no
+            arguments are passed, the command will iterate over all stacks.
+
             Options:
           EOS
           opt :update, 'Update ~/.ssh/config directly'

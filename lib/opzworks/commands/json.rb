@@ -27,6 +27,7 @@ module OpzWorks
             Options:
           EOS
           opt :quiet, 'Update the stack json without confirmation', short: 'q', default: false
+          opt :context, 'Change the number lines of diff context to show', short: 'c', default: 5
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
@@ -48,7 +49,7 @@ module OpzWorks
           BASH
 
           json = File.read("#{target_path}/stack.json")
-          diff = Diffy::Diff.new(@stack_json + "\n", json, context: 5)
+          diff = Diffy::Diff.new(@stack_json + "\n", json, context: options[:context])
           diff_str = diff.to_s(:color).chomp
 
           if diff_str.empty?

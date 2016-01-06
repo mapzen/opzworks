@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.2.4
+-----
+* provide ability to change the amount of diff context via --context {int} switch to json command
+
 0.2.3
 -----
 * provide --private option for ssh to allow use of private ips (defaults to public)

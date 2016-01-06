@@ -34,7 +34,7 @@ module OpzWorks
         aws_credentials_provider = Aws::SharedCredentials.new(profile_name: config.aws_profile)
         s3 = Aws::S3::Resource.new(region: config.aws_region, credentials: aws_credentials_provider)
 
-        opsworks   = Aws::OpsWorks::Client.new(region: config.aws_region, profile: config.aws_profile)
+        opsworks = Aws::OpsWorks::Client.new(region: config.aws_region, profile: config.aws_profile)
         response = opsworks.describe_stacks
 
         # loops over inputs

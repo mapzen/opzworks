@@ -113,7 +113,7 @@ built. Defaults to /tmp.
 
 `berks-tarball-name`, which is the name of the tarball that will be uploaded to S3. Defaults to cookbooks.tgz.
 
-## Setup Conventions/Workflow
+## Setup Conventions/Workflow for Berks/JSON Commands
 
 ![workflow](img/flow.png)
 

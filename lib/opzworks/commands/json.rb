@@ -52,13 +52,13 @@ module OpzWorks
           diff = Diffy::Diff.new(@stack_json + "\n", json, context: options[:context])
           diff_str = diff.to_s(:color).chomp
 
+          hash = {}
+          hash[:stack_id] = @stack_id
+          hash[:custom_json] = json
+
           if diff_str.empty?
             puts 'There are no differences between the existing stack json and the json you\'re asking to push.'.foreground(:yellow)
           else
-            hash = {}
-            hash[:stack_id] = @stack_id
-            hash[:custom_json] = json
-
             if options[:quiet]
               puts 'Quiet mode detected. Pushing the following updated json:'.foreground(:yellow)
               puts diff_str

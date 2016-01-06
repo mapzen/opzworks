@@ -20,7 +20,7 @@ module OpzWorks
           banner <<-EOS.unindent
             #{ELASTIC.banner}
 
-              opzworks elastic stack1 stack2 stack3
+              opzworks elastic stack1 stack2 ... [--start|--stop|--bounce|--rolling]
 
             The stack name can be passed as any unique regex. If there is
             more than one match, it will simply be skipped.
@@ -30,7 +30,7 @@ module OpzWorks
           opt :start, 'Start Elastic', default: false
           opt :stop, 'Stop Elastic', default: false
           opt :bounce, 'Bounce (stop/start) Elastic', default: false
-          opt :rolling_restart, 'Perform a rolling restart of Elastic', default: false
+          opt :rolling, 'Perform a rolling restart of Elastic', default: false
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
@@ -49,7 +49,7 @@ module OpzWorks
           es_get_input(opt, response)
           next if @get_data_failure == true
 
-          case options[:rolling_restart]
+          case options[:rolling]
           when true
             # cycle through all the hosts, waiting for status
             @ip_addrs.each do |ip|

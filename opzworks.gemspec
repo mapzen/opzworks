@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.email         = OpzWorks::EMAIL
   spec.description   = OpzWorks::DESCRIPTION
   spec.summary       = OpzWorks::SUMMARY
-  spec.homepage      = 'https://github.com/mapzen'
+  spec.homepage      = 'https://github.com/mapzen/opzworks'
   spec.license       = 'MIT'
 
   ignores = File.readlines('.gitignore').grep(/\S+/).map(&:chomp)

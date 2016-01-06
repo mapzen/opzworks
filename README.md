@@ -12,7 +12,7 @@ other useful tools like ssh.
 Aside from a recent version of ruby:
 
 * git
-* ChefDK
+* [ChefDK](https://downloads.chef.io/chef-dk/)
 
 ## Installation
 

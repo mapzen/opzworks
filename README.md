@@ -28,7 +28,7 @@ To build locally from this repository: `rake install`
 
 Run `opzworks` with one of the following commands:
 
-* `ssh`: generate and update SSH configuration files.
+#### `ssh`: generate and update SSH configuration files.
 
   Host names are based off the stack naming convention, `project_name::env::region`
 
@@ -62,16 +62,16 @@ Run `opzworks` with one of the following commands:
 
     `# OPSWORKS_CRON_LINE_MATCH`
 
-* `elastic`: perform [start|stop|bounce|rolling] operations on an Elastic cluster.
+#### `elastic`: perform [start|stop|bounce|rolling] operations on an Elastic cluster.
 
   The host from which this command is originated will need to have access to the the target
   systems via private IP and assumes port 9200 is open and available.
 
   This is a very rough implementation!
 
-* `json`: update stack custom JSON.
+#### `json`: update stack custom JSON.
 
-* `berks`: build the berkshelf for a stack, upload the tarball to S3, trigger
+#### `berks`: build the berkshelf for a stack, upload the tarball to S3, trigger
   `update_custom_cookbooks` on the stack.
 
 ## Configuration

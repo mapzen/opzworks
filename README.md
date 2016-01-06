@@ -1,7 +1,7 @@
 # OpzWorks CLI
 
-Command line interface providing a workflow for interacting with AWS OpsWorks chef cookbooks, and
-other useful tools like ssh.
+Command line interface for managing AWS OpsWorks chef cookbooks and stack json, as well
+as other OpsWorks centric tasks such as generating ssh configs for OpsWorks instances.
 
 ## Build Status
 

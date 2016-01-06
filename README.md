@@ -46,8 +46,8 @@ If you wanted to automatically scrape all your stacks to populate your ssh confi
 you don't want to use the `--update` flag (which will overwrite the entire file contents),
 you could do something like:
 
-Add a crontab entry similar to: `0 * * * * /bin/bash -l -c /path/to/opzworks-ssh.sh`
-Create `/path/to/opzworks-ssh.sh`:
+* add a crontab entry similar to: `0 * * * * /bin/bash -l -c /path/to/opzworks-ssh.sh`
+* create `/path/to/opzworks-ssh.sh`:
 
 ```bash
 # this script reads .ssh/config, drops anything after the matched line,

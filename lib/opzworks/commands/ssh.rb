@@ -36,23 +36,22 @@ module OpzWorks
         stack_data = client.describe_stacks
 
         if ARGV.empty?
-          stack_data[:stacks].each { |stack| stacks << stack[:stack_id] }
+          stack_data[:stacks].each { |stack| stacks.push(stack) }
         else
           ARGV.each do |arg|
             stack_data[:stacks].each do |stack|
-              stacks << stack[:stack_id] if stack[:name] =~ /#{arg}/
+              stacks.push(stack) if stack[:name] =~ /#{arg}/
             end
           end
         end
 
-        stacks.each do |stack_id|
+        stacks.each do |stack|
           instances   = []
           stack_name  = ''
 
-          stack_details = client.describe_stacks(stack_ids: [stack_id])
-          stack_details[:stacks].each { |stack| stack_name = stack[:name].gsub('::', '-') }
+          stack_name = stack[:name].gsub('::', '-')
 
-          result = client.describe_instances(stack_id: stack_id)
+          result = client.describe_instances(stack_id: stack[:stack_id])
           instances += result.instances.select { |i| i[:status] != 'stopped' }
 
           instances.map! do |instance|

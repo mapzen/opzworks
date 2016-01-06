@@ -62,7 +62,7 @@ Run `opzworks` with one of the following commands:
 
   Add the following line to the bottom of your existing ~/.ssh/config:
 
-    `# OPSWORKS_CRON_LINE_MATCH`
+    ```# OPSWORKS_CRON_LINE_MATCH```
 
 #### elastic
 

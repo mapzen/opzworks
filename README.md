@@ -3,6 +3,10 @@
 Command line interface providing a workflow for interacting with AWS OpsWorks chef cookbooks, and
 other useful tools like ssh.
 
+## Build Status
+
+[![Circle CI](https://circleci.com/gh/mapzen/opzworks.svg?style=svg)](https://circleci.com/gh/mapzen/opzworks)
+
 ## Third party requirements:
 
 Aside from a recent version of ruby:

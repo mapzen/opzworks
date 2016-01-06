@@ -27,6 +27,7 @@ module OpzWorks
           opt :update, 'Update ~/.ssh/config directly'
           opt :backup, 'Backup old SSH config before updating'
           opt :quiet, 'Use SSH LogLevel quiet', default: true
+          opt :private, 'Use private ips to populate SSH config, rather than public', default: false
         end
 
         config = OpzWorks.config
@@ -55,7 +56,11 @@ module OpzWorks
           instances += result.instances.select { |i| i[:status] != 'stopped' }
 
           instances.map! do |instance|
-            instance[:elastic_ip].nil? ? ip = instance[:public_ip] : ip = instance[:elastic_ip]
+            if options[:private]
+              ip = instance[:private_ip]
+            else
+              instance[:elastic_ip].nil? ? ip = instance[:public_ip] : ip = instance[:elastic_ip]
+            end
             parameters = {
               'Host'     => "#{instance[:hostname]}-#{stack_name}",
               'HostName' => ip,

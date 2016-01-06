@@ -30,56 +30,56 @@ Run `opzworks` with one of the following commands:
 
 #### ssh
 
-  Generate and update SSH configuration files.
+Generate and update SSH configuration files.
 
-  Host names are based off the stack naming convention, `project_name::env::region`
+Host names are based off the stack naming convention, `project_name::env::region`
 
-  For example, if we have a host 'api1' in the stack apiaxle::prod::us-east, the
-  resultant hostname will be `api1-apiaxle-prod-us-east`
+For example, if we have a host 'api1' in the stack apiaxle::prod::us-east, the
+resultant hostname will be `api1-apiaxle-prod-us-east`
 
-  By default, `opsworks ssh` will iterate over all stacks. If you wish to restrict the stacks
-  it searches, simply pass the stack name (or a partial match) as an argument:
+By default, `opsworks ssh` will iterate over all stacks. If you wish to restrict the stacks
+it searches, simply pass the stack name (or a partial match) as an argument:
 
-    `opzworks ssh myproject::prod`
+`opzworks ssh myproject::prod`
 
-  If you wanted to automatically scrape all your stacks to populate your ssh config, and
-  you don't want to use the `--update` flag (which will overwrite the entire file contents),
-  you could do something like:
+If you wanted to automatically scrape all your stacks to populate your ssh config, and
+you don't want to use the `--update` flag (which will overwrite the entire file contents),
+you could do something like:
 
-  Add a crontab entry similar to: `0 * * * * /bin/bash -l -c /path/to/opzworks-ssh.sh`
-  Create `/path/to/opzworks-ssh.sh`:
+Add a crontab entry similar to: `0 * * * * /bin/bash -l -c /path/to/opzworks-ssh.sh`
+Create `/path/to/opzworks-ssh.sh`:
 
-    ```bash
-    # this script reads .ssh/config, drops anything after the matched line,
-    #   then generates a list of opsworks hosts and appends them to the file.
-    gsed -i '/OPSWORKS_CRON_LINE_MATCH/q' ~/.ssh/config
-    opzworks ssh >>~/.ssh/config
-    ```
+```bash
+# this script reads .ssh/config, drops anything after the matched line,
+#   then generates a list of opsworks hosts and appends them to the file.
+gsed -i '/OPSWORKS_CRON_LINE_MATCH/q' ~/.ssh/config
+opzworks ssh >>~/.ssh/config
+```
 
-  Note this example assumes the use of a gnu sed-like utility, which on OSX means
-  installing gnu sed (`brew install gsed` if you're using homebrew). On Linux, simply
-  change `gsed` to `sed`.
+Note this example assumes the use of a gnu sed-like utility, which on OSX means
+installing gnu sed (`brew install gsed` if you're using homebrew). On Linux, simply
+change `gsed` to `sed`.
 
-  Add the following line to the bottom of your existing ~/.ssh/config:
+Add the following line to the bottom of your existing ~/.ssh/config:
 
-    # OPSWORKS_CRON_LINE_MATCH
+`# OPSWORKS_CRON_LINE_MATCH`
 
 #### elastic
 
-  Perform [start|stop|bounce|rolling] operations on an Elastic cluster.
+Perform [start|stop|bounce|rolling] operations on an Elastic cluster.
 
-  The host from which this command is originated will need to have access to the the target
-  systems via private IP and assumes port 9200 is open and available.
+The host from which this command is originated will need to have access to the the target
+systems via private IP and assumes port 9200 is open and available.
 
-  This is a very rough implementation!
+This is a very rough implementation!
 
 #### json
 
-  Update stack custom JSON.
+Update stack custom JSON.
 
 #### berks
 
-  Build the berkshelf for a stack, upload the tarball to S3, trigger `update_custom_cookbooks` on the stack.
+Build the berkshelf for a stack, upload the tarball to S3, trigger `update_custom_cookbooks` on the stack.
 
 ## Configuration
 

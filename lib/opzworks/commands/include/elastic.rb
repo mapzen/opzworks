@@ -24,6 +24,7 @@ def es_get_input(input, data = {}, *cmd)
     puts 'Found more than one stack matching input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
     @get_data_failure = true
   else
+    puts 'Operating on stack '.foreground(:blue) + "#{match[:name]}".foreground(:green)
     layers = @client.describe_layers(stack_id: match[:stack_id])
     layers[:layers].each { |layer| printf("%-30s %-50s\n", layer[:name], layer[:layer_id]) }
 

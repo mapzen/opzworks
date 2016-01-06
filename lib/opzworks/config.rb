@@ -20,7 +20,7 @@ module OpzWorks
       @aws_region  = ENV['AWS_REGION'] || ini[@aws_profile]['region']
 
       @ssh_user_name = ini['opzworks']['ssh-user-name'].strip
-      @berks_repository_path  = ini['opzworks']['berks-repository-path'].strip
+      @berks_repository_path = ini['opzworks']['berks-repository-path'].strip
 
       @berks_base_path =
         ini['opzworks']['berks-base-path'].strip unless ini['opzworks']['berks-base-path'].nil?

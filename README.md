@@ -56,6 +56,11 @@ Run `opzworks` with one of the following commands:
 
     `# OPSWORKS_CRON_LINE_MATCH`
 
+* `elastic`: perform [start|stop|bounce|rolling_restart] operations on an Elastic cluster.
+
+  The host from which this command is originated will need to have access to the the target
+  systems via private IP and assumes port 9200 is open and available.
+
 * `json`: update stack custom JSON.
 
 * `berks`: build the berkshelf for a stack, upload the tarball to S3, trigger

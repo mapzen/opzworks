@@ -4,7 +4,7 @@ require 'opzworks'
 module OpzWorks
   class CLI
     def self.start
-      commands = %w(ssh json berks)
+      commands = %w(ssh json berks elastic)
 
       Trollop.options do
         version "opzworks #{OpzWorks::VERSION} (c) #{OpzWorks::AUTHORS.join(', ')}"
@@ -17,6 +17,7 @@ module OpzWorks
             ssh  #{OpzWorks::Commands::SSH.banner}
             json #{OpzWorks::Commands::JSON.banner}
             berks #{OpzWorks::Commands::BERKS.banner}
+            elastic #{OpzWorks::Commands::ELASTIC.banner}
 
           For help with specific commands, run:
             opzworks COMMAND -h/--help
@@ -34,6 +35,8 @@ module OpzWorks
         OpzWorks::Commands::JSON.run
       when 'berks'
         OpzWorks::Commands::BERKS.run
+      when 'elastic'
+        OpzWorks::Commands::ELASTIC.run
       when nil
         Trollop.die 'no command specified'
       else

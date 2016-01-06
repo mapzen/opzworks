@@ -55,7 +55,7 @@ module OpzWorks
             puts 'There are no differences between the existing stack json and the json you\'re asking to push.'.foreground(:yellow)
           else
             if options[:quiet]
-              puts "Quiet mode detected. Pushing the following updated json:".foreground(:yellow)
+              puts 'Quiet mode detected. Pushing the following updated json:'.foreground(:yellow)
               puts diff_str
 
               hash = {}

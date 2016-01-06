@@ -32,7 +32,9 @@ Run `opzworks` with one of the following commands:
 
 Generate and update SSH configuration files.
 
-Host names are based off the stack naming convention, `project_name::env::region`
+Host names are based off the stack naming convention, `project_name::env::region`. The default
+is to use public instance IPs (or elastic ip if one is assigned). Passing the `--private` option
+will instead use instance private IPs.
 
 For example, if we have a host 'api1' in the stack apiaxle::prod::us-east, the
 resultant hostname will be `api1-apiaxle-prod-us-east`
@@ -188,7 +190,7 @@ If we placed that Berkshelf file in opsworks-elastic, in the prod-us-east branch
 
 * build the berkshelf locally
 * push the resultant cookbook tarball to: s3://opzworks/elastic-prod-us-east/cookbooks.tgz
-* run `update_custom_cookbook` on the stack (unless you pass the --no-update flag)
+* run `update_custom_cookbook` on the stack (unless you pass the `--no-update` flag)
 
 Your stack should be configured to use a berkshelf from an S3 archive. The url will look as below:
 

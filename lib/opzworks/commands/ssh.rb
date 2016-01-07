@@ -80,6 +80,7 @@ module OpzWorks
             next
           else
             new_contents = "#{instances.join("\n")}\n"
+
             if options[:update]
               ssh_config = "#{ENV['HOME']}/.ssh/config"
               old_contents = File.read(ssh_config)

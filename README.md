@@ -30,7 +30,7 @@ Run `opzworks` with one of the following commands:
 
 #### ssh
 
-Generate and update SSH configuration files.
+Generate and update SSH configuration files, or alternatively return a list of IPs for matching stacks.
 
 Host names are based off the stack naming convention, `project_name::env::region`. The default
 is to use public instance IPs (or elastic ip if one is assigned). Passing the `--private` option
@@ -65,6 +65,10 @@ change `gsed` to `sed`.
 Add the following line to the bottom of your existing ~/.ssh/config:
 
 `# OPSWORKS_CRON_LINE_MATCH`
+
+To return only a list of IPs, pass the `--raw` flag:
+
+`opzworks ssh -r mystack1 mystack2` or `opzworks ssh -r -p mystack`, etc.
 
 #### elastic
 

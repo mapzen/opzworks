@@ -12,10 +12,10 @@ def populate_stack(input, data = {})
   # break?
   if count < 1
     puts 'No matching stacks found for input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
-    @populate_stack_failure = true
+    return false
   elsif count > 1
     puts 'Found more than one stack matching input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
-    @populate_stack_failure = true
+    return false
   else
     @stack_json = match[:custom_json]
     @project    = match[:name].split('::').first

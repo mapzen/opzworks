@@ -5,7 +5,7 @@ def manage_berks_repos
   if !File.directory?(@target_path)
     if config.berks_github_org.nil?
       puts "#{@target_path} does not exist, and 'berks-github-org' is not set in ~/.aws/config, skipping.".foreground(:yellow)
-      @berks_repo_failure = true
+      return false
     else
       repo = "git@github.com:#{config.berks_github_org}/opsworks-#{@project}.git"
       puts "#{@target_path} does not exist!".foreground(:red)

@@ -40,11 +40,11 @@ module OpzWorks
 
         # loops over inputs
         ARGV.each do |opt|
-          populate_stack(opt, response)
-          next if @populate_stack_failure == true
+          var = populate_stack(opt, response)
+          next if var == false
 
-          manage_berks_repos
-          next if @berks_repo_failure == true
+          var = manage_berks_repos
+          next if var == false
 
           berks_cook_path  = config.berks_base_path || '/tmp'
           cook_path        = "#{berks_cook_path}/#{@project}-#{@branch}"

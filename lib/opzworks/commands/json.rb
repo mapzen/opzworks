@@ -38,11 +38,11 @@ module OpzWorks
 
         # loops over inputs
         ARGV.each do |opt|
-          populate_stack(opt, response)
-          next if @populate_stack_failure == true
+          var = populate_stack(opt, response)
+          next if var == false
 
-          manage_berks_repos
-          next if @berks_repo_failure == true
+          var = manage_berks_repos
+          next if var == false
 
           json = File.read("#{@target_path}/stack.json")
           diff = Diffy::Diff.new(@stack_json + "\n", json, context: options[:context])

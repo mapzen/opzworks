@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.3.4
+-----
+* -r option for `ssh` to return raw ips
+
 0.3.0
 -----
 * attempt to clone opsworks-${project} repo if not found

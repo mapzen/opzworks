@@ -28,6 +28,7 @@ module OpzWorks
           opt :backup, 'Backup old SSH config before updating'
           opt :quiet, 'Use SSH LogLevel quiet', default: true
           opt :private, 'Use private ips to populate SSH config, rather than public', default: false
+          opt :raw, 'Return only raw IPs rather than .ssh/config format output', default: false
         end
 
         config = OpzWorks.config
@@ -61,16 +62,21 @@ module OpzWorks
             else
               instance[:elastic_ip].nil? ? ip = instance[:public_ip] : ip = instance[:elastic_ip]
             end
-            parameters = {
-              'Host'     => "#{instance[:hostname]}-#{stack_name}",
-              'HostName' => ip,
-              'User'     => config.ssh_user_name
-            }
-            parameters['LogLevel'] = 'quiet' if options[:quiet]
-            parameters.map { |param| param.join(' ') }.join("\n  ")
+
+            if options[:raw]
+              puts ip
+            else
+              parameters = {
+                'Host'     => "#{instance[:hostname]}-#{stack_name}",
+                'HostName' => ip,
+                'User'     => config.ssh_user_name
+              }
+              parameters['LogLevel'] = 'quiet' if options[:quiet]
+              parameters.map { |param| param.join(' ') }.join("\n  ")
+            end
           end
 
-          new_contents = "#{instances.join("\n")}\n"
+          new_contents = "#{instances.join("\n")}\n" unless options[:raw]
 
           if options[:update]
             ssh_config = "#{ENV['HOME']}/.ssh/config"
@@ -91,7 +97,7 @@ module OpzWorks
 
             puts "Successfully updated #{ssh_config} with #{instances.length} instances!"
           else
-            puts new_contents.strip
+            puts new_contents.strip unless options[:raw]
           end
         end
       end

@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.3.6
+-----
+* bug fix for elasticsearch 'start'
+
 0.3.4
 -----
 * -r option for `ssh` to return raw ips

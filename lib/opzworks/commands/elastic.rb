@@ -46,8 +46,12 @@ module OpzWorks
 
         # loops over inputs
         ARGV.each do |opt|
-          es_get_input(opt, response)
-          next if @get_data_failure == true
+          if options[:start]
+            var = es_get_input(opt, response, 'start')
+          else
+            var = es_get_input(opt, response)
+          end
+          next if var == false
 
           case options[:rolling]
           when true

@@ -19,10 +19,10 @@ def es_get_input(input, data = {}, *cmd)
   # break?
   if count < 1
     puts 'No matching stacks found for input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
-    @get_data_failure = true
+    return false
   elsif count > 1
     puts 'Found more than one stack matching input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
-    @get_data_failure = true
+    return false
   else
     puts 'Operating on stack '.foreground(:blue) + "#{match[:name]}".foreground(:green)
     layers = @client.describe_layers(stack_id: match[:stack_id])

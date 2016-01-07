@@ -36,7 +36,6 @@ module OpzWorks
         client   = Aws::OpsWorks::Client.new(region: config.aws_region, profile: config.aws_profile)
         response = client.describe_stacks
 
-        # loops over inputs
         ARGV.each do |opt|
           var = populate_stack(opt, response)
           next if var == false

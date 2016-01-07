@@ -45,7 +45,7 @@ def es_get_input(input, data = {}, *cmd)
     options = {}
     if layer == ''
       puts 'Must specify a layer.'.foreground(:red)
-      abort
+      return false
     else
       options[:layer_id] = layer
     end

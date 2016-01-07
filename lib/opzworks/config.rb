@@ -7,7 +7,7 @@ module OpzWorks
 
   class Config
     attr_reader :ssh_user_name, :berks_repository_path, :aws_region, :aws_profile,
-                :berks_base_path, :berks_s3_bucket, :berks_tarball_name
+                :berks_base_path, :berks_s3_bucket, :berks_tarball_name, :berks_github_org
 
     def initialize
       file = ENV['AWS_CONFIG_FILE'] || "#{ENV['HOME']}/.aws/config"
@@ -27,7 +27,9 @@ module OpzWorks
       @berks_s3_bucket =
         ini['opzworks']['berks-s3-bucket'].strip unless ini['opzworks']['berks-s3-bucket'].nil?
       @berks_tarball_name =
-        ini['opzworks']['berks-tarball-name'].strip unless ini['opsworks']['berks-tarball-name'].nil?
+        ini['opzworks']['berks-tarball-name'].strip unless ini['opzworks']['berks-tarball-name'].nil?
+      @berks_github_org =
+        ini['opzworks']['berks-github-org'].strip unless ini['opzworks']['berks-github-org'].nil?
     end
   end
 end

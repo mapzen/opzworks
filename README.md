@@ -103,6 +103,7 @@ Add the following section to `~/.aws/config`:
     [opzworks]
     ssh-user-name         = <MY SSH USER NAME>
     berks-repository-path = <PATH TO OPSWORKS BERKSHELF REPOSITORIES>
+    berks-github-org      = <GITHUB ORG THAT YOUR OPSWORKS REPOSITORIES EXIST UNDER>
     berks-s3-bucket       = <AN EXISTING S3 BUCKET>
 
 The `ssh-user-name` value should be set to the username you want to use when
@@ -114,6 +115,10 @@ git repositories for each stack will live.
 
 The `berks-s3-bucket` will default to 'opzworks' if not set. You need to create the
 the bucket manually (e.g. `aws s3 mb s3://opsworks-cookbook-bucket`).
+
+The `berks-github-org` setting is used if you try to run `berks` or `json` on a stack, and
+the local opsworks-${project} repo isn't found. In this event, the code will attempt to clone
+the repo into `berks-repository-path` and continue.
 
 Additional option are:
 

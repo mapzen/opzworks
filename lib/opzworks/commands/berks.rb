@@ -5,6 +5,7 @@ require 'rainbow/ext/string'
 
 require_relative 'include/run_local'
 require_relative 'include/populate_stack'
+require_relative 'include/manage_berks_repos'
 
 module OpzWorks
   class Commands
@@ -42,13 +43,8 @@ module OpzWorks
           populate_stack(opt, response)
           next if @populate_stack_failure == true
 
-          target_path = File.expand_path(config.berks_repository_path + "/opsworks-#{@project}", File.dirname(__FILE__))
-
-          puts "Git pull from #{target_path}, branch: ".foreground(:blue) + @branch.foreground(:green)
-          run_local <<-BASH
-            cd #{target_path}
-            git checkout #{@branch} && git pull origin #{@branch}
-          BASH
+          manage_berks_repos
+          next if @berks_repo_failure == true
 
           berks_cook_path  = config.berks_base_path || '/tmp'
           cook_path        = "#{berks_cook_path}/#{@project}-#{@branch}"
@@ -63,20 +59,20 @@ module OpzWorks
           #
           puts 'Running berks install'.foreground(:blue)
           run_local <<-BASH
-            cd #{target_path}
+            cd #{@target_path}
             berks update
           BASH
           run_local <<-BASH
-            cd #{target_path}
+            cd #{@target_path}
             berks vendor #{install_path}
           BASH
 
           # if there's a Berksfile.opsworks, push it up to let nodes build their cookbook
           #   repository from its contents
           #
-          if File.file?("#{target_path}/#{opsworks_berks}")
+          if File.file?("#{@target_path}/#{opsworks_berks}")
             puts 'Copying opsworks Berksfile into place'.foreground(:blue)
-            FileUtils.copy("#{target_path}/#{opsworks_berks}", "#{install_path}/Berksfile")
+            FileUtils.copy("#{@target_path}/#{opsworks_berks}", "#{install_path}/Berksfile")
           end
 
           # if there's an overrides file, just pull it and stuff the contents into the
@@ -87,11 +83,11 @@ module OpzWorks
           #     repo with the directory structure nginx/templates/default and place your
           #     custom nginx.conf.erb in it.
           #
-          if File.file?("#{target_path}/#{overrides}")
+          if File.file?("#{@target_path}/#{overrides}")
             unless File.directory?("#{install_path}")
               FileUtils.mkdir_p("#{install_path}")
             end
-            File.open("#{target_path}/#{overrides}") do |f|
+            File.open("#{@target_path}/#{overrides}") do |f|
               f.each_line do |line|
                 puts "Copying override #{line}".foreground(:blue)
                 `cd #{install_path} && git clone #{line}`
@@ -100,7 +96,7 @@ module OpzWorks
           end
 
           puts 'Committing changes and pushing'.foreground(:blue)
-          system "cd #{target_path} && git commit -am 'berks update'; git push origin #{@branch}"
+          system "cd #{@target_path} && git commit -am 'berks update'; git push origin #{@branch}"
 
           puts 'Creating tarball of cookbooks'.foreground(:blue)
           FileUtils.mkdir_p("#{cook_path}")

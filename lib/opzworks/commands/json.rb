@@ -6,6 +6,7 @@ require 'rainbow/ext/string'
 
 require_relative 'include/run_local'
 require_relative 'include/populate_stack'
+require_relative 'include/manage_berks_repos'
 
 module OpzWorks
   class Commands
@@ -40,15 +41,10 @@ module OpzWorks
           populate_stack(opt, response)
           next if @populate_stack_failure == true
 
-          target_path = File.expand_path(config.berks_repository_path + "/opsworks-#{@project}", File.dirname(__FILE__))
+          manage_berks_repos
+          next if @berks_repo_failure == true
 
-          puts "Git pull from #{target_path}, branch: ".foreground(:blue) + @branch.foreground(:green)
-          run_local <<-BASH
-            cd #{target_path}
-            git checkout #{@branch} && git pull origin #{@branch}
-          BASH
-
-          json = File.read("#{target_path}/stack.json")
+          json = File.read("#{@target_path}/stack.json")
           diff = Diffy::Diff.new(@stack_json + "\n", json, context: options[:context])
           diff_str = diff.to_s(:color).chomp
 

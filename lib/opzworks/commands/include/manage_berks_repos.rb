@@ -7,11 +7,12 @@ def manage_berks_repos
       puts "#{@target_path} does not exist, and 'berks-github-org' is not set in ~/.aws/config, skipping.".foreground(:yellow)
       @berks_repo_failure = true
     else
+      repo = "git@github.com:#{config.berks_github_org}/opsworks-#{@project}.git"
       puts "#{@target_path} does not exist!".foreground(:red)
-      puts 'Attempting git clone of '.foreground(:blue) + "git@github.com:#{config.berks_github_org}/opsworks-#{@project}.".foreground(:green)
+      puts 'Attempting git clone of '.foreground(:blue) + repo.foreground(:green)
       run_local <<-BASH
         cd #{config.berks_repository_path}
-        git clone git@github.com:#{config.berks_github_org}/opsworks-#{@project}.git
+        git clone #{repo}
       BASH
     end
   else

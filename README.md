@@ -136,7 +136,7 @@ built. Defaults to /tmp.
 ![workflow](img/flow.png)
 
 This gem makes a number of assumptions in order to enforce a specific workflow. First among them is
-the Opsworks stack naming convection. This will need to adhere toe the following format:
+the Opsworks stack naming convection. This will need to adhere to the following format:
 
     PROJECT::ENV::REGION
 

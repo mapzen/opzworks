@@ -76,28 +76,31 @@ module OpzWorks
             end
           end
 
-          new_contents = "#{instances.join("\n")}\n" unless options[:raw]
-
-          if options[:update]
-            ssh_config = "#{ENV['HOME']}/.ssh/config"
-            old_contents = File.read(ssh_config)
-
-            if options[:backup]
-              backup_name = ssh_config + '.backup'
-              File.open(backup_name, 'w') { |file| file.puts old_contents }
-            end
-
-            File.open(ssh_config, 'w') do |file|
-              file.puts old_contents.gsub(
-                /\n?\n?#{SSH_PREFIX}.*#{SSH_POSTFIX}\n?\n?/m,
-                ''
-              )
-              file.puts new_contents
-            end
-
-            puts "Successfully updated #{ssh_config} with #{instances.length} instances!"
+          if options[:raw]
+            next
           else
-            puts new_contents.strip unless options[:raw]
+            new_contents = "#{instances.join("\n")}\n"
+            if options[:update]
+              ssh_config = "#{ENV['HOME']}/.ssh/config"
+              old_contents = File.read(ssh_config)
+
+              if options[:backup]
+                backup_name = ssh_config + '.backup'
+                File.open(backup_name, 'w') { |file| file.puts old_contents }
+              end
+
+              File.open(ssh_config, 'w') do |file|
+                file.puts old_contents.gsub(
+                  /\n?\n?#{SSH_PREFIX}.*#{SSH_POSTFIX}\n?\n?/m,
+                  ''
+                )
+                file.puts new_contents
+              end
+
+              puts "Successfully updated #{ssh_config} with #{instances.length} instances!"
+            else
+              puts new_contents.strip
+            end
           end
         end
       end

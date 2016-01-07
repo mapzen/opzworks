@@ -60,12 +60,14 @@ module OpzWorks
               puts "\n________________________________________________"
               puts "Now operating on host #{ip}".foreground(:yellow)
 
-              es_enable_allocation(ip, 'none') if @disable_shard_allocation == true
-              sleep 2 if @disable_shard_allocation == true
+              if @disable_shard_allocation
+                es_enable_allocation(ip, 'none')
+                sleep 2
+              end
 
               es_service('restart', [ip])
               es_wait_for_status(ip, 'yellow')
-              es_enable_allocation(ip, 'all') if @disable_shard_allocation == true
+              es_enable_allocation(ip, 'all') if @disable_shard_allocation
               es_wait_for_status(ip, 'green')
             end
           end
@@ -82,8 +84,10 @@ module OpzWorks
           case options[:stop]
           when true
             # use the first host to disable shard allocation
-            es_enable_allocation(@ip_addrs.first, 'none') if @disable_shard_allocation == true
-            sleep 2 if @disable_shard_allocation == true
+            if @disable_shard_allocation
+              es_enable_allocation(@ip_addrs.first, 'none')
+              sleep 2
+            end
 
             es_service('stop', @ip_addrs)
           end
@@ -91,13 +95,15 @@ module OpzWorks
           case options[:bounce]
           when true
             # use the first host to disable shard allocation
-            es_enable_allocation(@ip_addrs.first, 'none') if @disable_shard_allocation == true
-            sleep 2 if @disable_shard_allocation == true
+            if @disable_shard_allocation
+              es_enable_allocation(@ip_addrs.first, 'none')
+              sleep 2
+            end
 
             es_service('restart', @ip_addrs)
 
             es_wait_for_status(@ip_addrs.first, 'yellow')
-            es_enable_allocation(@ip_addrs.first, 'all') if @disable_shard_allocation == true
+            es_enable_allocation(@ip_addrs.first, 'all') if @disable_shard_allocation
             es_wait_for_status(@ip_addrs.first, 'green')
           end
         end

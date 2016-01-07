@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.3.7
+-----
+* elastic code enhancements, including a timeout on ssh connect
+
 0.3.6
 -----
 * bug fix for elasticsearch 'start'

@@ -86,7 +86,9 @@ def es_service(command, ips = [])
       session.use "#{user}@#{ip}"
     end
 
-    session.exec "sudo service elasticsearch #{command}"
+    Timeout::timeout(10) do
+      session.exec "sudo service elasticsearch #{command}"
+    end
     session.loop
   end
 end

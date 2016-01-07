@@ -52,7 +52,6 @@ module OpzWorks
           cookbook_tarball = config.berks_tarball_name || 'cookbooks.tgz'
           cookbook_upload  = "#{cook_path}" + '/' "#{cookbook_tarball}"
           s3_bucket        = config.berks_s3_bucket || 'opzworks'
-          opsworks_berks   = 'Berksfile.opsworks'
           overrides        = 'overrides'
 
           # berks
@@ -66,14 +65,6 @@ module OpzWorks
             cd #{@target_path}
             berks vendor #{install_path}
           BASH
-
-          # if there's a Berksfile.opsworks, push it up to let nodes build their cookbook
-          #   repository from its contents
-          #
-          if File.file?("#{@target_path}/#{opsworks_berks}")
-            puts 'Copying opsworks Berksfile into place'.foreground(:blue)
-            FileUtils.copy("#{@target_path}/#{opsworks_berks}", "#{install_path}/Berksfile")
-          end
 
           # if there's an overrides file, just pull it and stuff the contents into the
           #   upload repo; the line is assumed to be a git repo. This is done to override

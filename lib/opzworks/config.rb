@@ -1,4 +1,5 @@
 require 'inifile'
+require 'rainbow'
 
 module OpzWorks
   def self.config
@@ -12,7 +13,7 @@ module OpzWorks
     def initialize
       file = ENV['AWS_CONFIG_FILE'] || "#{ENV['HOME']}/.aws/config"
 
-      fail 'AWS config file not found' unless File.exist? file
+      fail 'AWS config file not found!'.foreground(:red) unless File.exist? file
       ini = IniFile.load(file)
 
       # set the region and the profile we want to pick up from ~/.aws/credentials

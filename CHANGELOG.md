@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.3.0
+-----
+* attempt to clone opsworks-${project} repo if not found
+
 0.2.4
 -----
 * provide ability to change the amount of diff context via --context {int} switch to json command

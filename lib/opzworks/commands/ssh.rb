@@ -27,7 +27,7 @@ module OpzWorks
           opt :update, 'Update ~/.ssh/config directly'
           opt :backup, 'Backup old SSH config before updating'
           opt :quiet, 'Use SSH LogLevel quiet', default: true
-          opt :private, 'Use private ips to populate SSH config, rather than public', default: false
+          opt :private, 'Return private IPs, rather than the default of public', default: false
           opt :raw, 'Return only raw IPs rather than .ssh/config format output', default: false
         end
 

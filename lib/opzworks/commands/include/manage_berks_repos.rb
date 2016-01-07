@@ -8,7 +8,7 @@ def manage_berks_repos
       @berks_repo_failure = true
     else
       puts "#{@target_path} does not exist!".foreground(:red)
-      puts 'Attempting git clone of '.foreground(:blue) + "opsworks-#{@project}.".foreground(:green)
+      puts 'Attempting git clone of '.foreground(:blue) + "git@github.com:#{config.berks_github_org}/opsworks-#{@project}.".foreground(:green)
       run_local <<-BASH
         cd #{config.berks_repository_path}
         git clone git@github.com:#{config.berks_github_org}/opsworks-#{@project}.git

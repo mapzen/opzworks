@@ -85,7 +85,11 @@ Update stack custom JSON.
 
 #### berks
 
-Build the berkshelf for a stack, upload the tarball to S3, trigger `update_custom_cookbooks` on the stack.
+Build the berkshelf for a stack, or only upload the Berksfile to allow remote berkshelf management on the host, upload the tarball to S3, trigger `update_custom_cookbooks` on the stack.
+
+If there is a `Berksfile.opsworks` present in your opsworks-${project} repo, it will simply be copied in
+and uploaded to S3. You can then enabled self-management of the berkshelf on the stack. Every host will
+then build and manage its own berkshelf.
 
 ## Configuration
 

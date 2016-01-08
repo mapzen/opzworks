@@ -53,50 +53,6 @@ Update stack custom JSON.
 
 Build the berkshelf for a stack, or only upload the Berksfile to allow remote berkshelf management on the host, upload the tarball to S3, trigger `update_custom_cookbooks` on the stack.
 
-## Configuration
-
-The gem reads information from `~/.aws/config`, or from the file referenced by
-the `AWS_CONFIG_FILE` environment variable. It should already look something like this:
-
-    [default]
-    aws_access_key_id     = ilmiochiaveID
-    aws_secret_access_key = ilmiochiavesegreto
-    region                = us-east-1
-    output                = json
-
-If you want the gem to read from an environment other than 'default', you can do so
-by exporting the `AWS_PROFILE` environment variable. It should be set to whatever profile
-name you have defined that you want to use in the config file.
-
-Add the following section to `~/.aws/config`:
-
-    [opzworks]
-    ssh-user-name         = <MY SSH USER NAME>
-    berks-repository-path = <PATH TO OPSWORKS BERKSHELF REPOSITORIES>
-    berks-github-org      = <GITHUB ORG THAT YOUR OPSWORKS REPOSITORIES EXIST UNDER>
-    berks-s3-bucket       = <AN EXISTING S3 BUCKET>
-
-The `ssh-user-name` value should be set to the username you want to use when
-logging in remotely, most probably the user name from your _My Settings_ page
-in OpsWorks.
-
-The `berks-repository-path` should point to a base directory in which your opsworks
-git repositories for each stack will live.
-
-The `berks-s3-bucket` will default to 'opzworks' if not set. You need to create the
-the bucket manually (e.g. `aws s3 mb s3://opsworks-cookbook-bucket`).
-
-The `berks-github-org` setting is used if you try to run `berks` or `json` on a stack, and
-the local opsworks-${project} repo isn't found. In this event, the code will attempt to clone
-the repo into `berks-repository-path` and continue.
-
-Additional options are:
-
-`berks-base-path`, which is the temporary base directory where the berkshelf will be
-built. Defaults to /tmp.
-
-`berks-tarball-name`, which is the name of the tarball that will be uploaded to S3. Defaults to cookbooks.tgz.
-
 ## Contributing
 
 1. Fork it

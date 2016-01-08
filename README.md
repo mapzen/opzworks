@@ -30,8 +30,6 @@ To build locally from this repository: `rake install`
 
 ## Commands
 
-Run `opzworks` with one of the following commands:
-
 #### ssh
 
 Generate and update SSH configuration files, or alternatively return a list of IPs for matching stacks.

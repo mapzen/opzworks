@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.3.9
+-----
+* add remote management berkshelf option back in: if there is a Berksfile.opsworks present in the
+  opsworks-${project} repo, simply upload it to S3 (don't build the local berkshelf)
+
 0.3.7
 -----
 * elastic code enhancements, including a timeout on ssh connect

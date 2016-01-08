@@ -89,7 +89,7 @@ Build the berkshelf for a stack, or only upload the Berksfile to allow remote be
 
 If there is a `Berksfile.opsworks` present in your opsworks-${project} repo, it will simply be copied in
 and uploaded to S3. You can then enabled self-management of the berkshelf on the stack. Every host will
-then build and manage its own berkshelf.
+then build and manage its own berkshelf. Note that this options is only available for Chef 11.10 Opsworks Stacks.
 
 ## Configuration
 

@@ -3,6 +3,10 @@
 Command line interface for managing AWS OpsWorks chef cookbooks and stack json, as well
 as other OpsWorks centric tasks such as generating ssh configs for OpsWorks instances.
 
+## Wiki
+
+See the [wiki](https://github.com/mapzen/opzworks/wiki) for more detailed information on getting started, walkthroughs, etc.
+
 ## Build Status
 
 [![Circle CI](https://circleci.com/gh/mapzen/opzworks.svg?style=svg)](https://circleci.com/gh/mapzen/opzworks)
@@ -32,44 +36,6 @@ Run `opzworks` with one of the following commands:
 
 Generate and update SSH configuration files, or alternatively return a list of IPs for matching stacks.
 
-Host names are based off the stack naming convention, `project_name::env::region`. The default
-is to use public instance IPs (or elastic ip if one is assigned). Passing the `--private` option
-will instead use instance private IPs.
-
-For example, if we have a host 'api1' in the stack apiaxle::prod::us-east, the
-resultant hostname will be `api1-apiaxle-prod-us-east`
-
-By default, `opsworks ssh` will iterate over all stacks. If you wish to restrict the stacks
-it searches, simply pass the stack name (or a partial match) as an argument:
-
-`opzworks ssh myproject::prod`
-
-If you wanted to automatically scrape all your stacks to populate your ssh config, and
-you don't want to use the `--update` flag (which will overwrite the entire file contents),
-you could do something like:
-
-* add a crontab entry similar to: `0 * * * * /bin/bash -l -c /path/to/opzworks-ssh.sh`
-* create `/path/to/opzworks-ssh.sh`:
-
-```bash
-# this script reads .ssh/config, drops anything after the matched line,
-#   then generates a list of opsworks hosts and appends them to the file.
-gsed -i '/OPSWORKS_CRON_LINE_MATCH/q' ~/.ssh/config
-opzworks ssh >>~/.ssh/config
-```
-
-Note this example assumes the use of a gnu sed-like utility, which on OSX means
-installing gnu sed (`brew install gsed` if you're using homebrew). On Linux, simply
-change `gsed` to `sed`.
-
-Add the following line to the bottom of your existing ~/.ssh/config:
-
-`# OPSWORKS_CRON_LINE_MATCH`
-
-To return only a list of IPs, pass the `--raw` flag:
-
-`opzworks ssh -r mystack1 mystack2` or `opzworks ssh -r -p mystack`, etc.
-
 #### elastic
 
 Perform [start|stop|bounce|rolling] operations on an Elastic cluster.
@@ -86,10 +52,6 @@ Update stack custom JSON.
 #### berks
 
 Build the berkshelf for a stack, or only upload the Berksfile to allow remote berkshelf management on the host, upload the tarball to S3, trigger `update_custom_cookbooks` on the stack.
-
-If there is a `Berksfile.opsworks` present in your opsworks-${project} repo, it will simply be copied in
-and uploaded to S3. You can then enabled self-management of the berkshelf on the stack. Every host will
-then build and manage its own berkshelf. Note that this options is only available for Chef 11.10 Opsworks Stacks.
 
 ## Configuration
 
@@ -128,88 +90,12 @@ The `berks-github-org` setting is used if you try to run `berks` or `json` on a 
 the local opsworks-${project} repo isn't found. In this event, the code will attempt to clone
 the repo into `berks-repository-path` and continue.
 
-Additional option are:
+Additional options are:
 
 `berks-base-path`, which is the temporary base directory where the berkshelf will be
 built. Defaults to /tmp.
 
 `berks-tarball-name`, which is the name of the tarball that will be uploaded to S3. Defaults to cookbooks.tgz.
-
-## Setup Conventions/Workflow for Berks/JSON Commands
-
-![workflow](img/flow.png)
-
-This gem makes a number of assumptions in order to enforce a specific workflow. First among them is
-the Opsworks stack naming convection. This will need to adhere to the following format:
-
-    PROJECT::ENV::REGION
-
-If PROJECT will be comprised of multiple words, they should be joined with underscores, e.g.
-
-    my_awesome_rails_app::prod::us-east
-
-So for example, if you have an Elastic cluster in dev and prod in us-east, and dev in us-west:
-
-    elastic::dev::us-east
-    elastic::dev::us-west
-    elastic::prod::us-east
-
-The next workflow that must be conformed to is berkshelf management. In this context, that means a git
-repository that conforms to the following setup:
-
-    opsworks-project
-
-Inside that repository, you will have branches that match each of your environments and regions.
-
-So in our Elastic example, you would have the following setup:
-
-* a git repository called opsworks-elastic
-* branches in that repository called dev-us-east, dev-us-west and prod-us-east
-
-In each of those branches, you should have the following:
-
-* Berksfile
-* stack.json (if you want to maintain the stack json using the `opzworks json` utility)
-
-The Berksfile will look similar to the following. If you're familiar with Berkshelf, there's nothing
-new here:
-
-```ruby
-source 'https://api.berkshelf.com'
-
-# opsworks
-cookbook 'apache2' , github: 'aws/opsworks-cookbooks' , branch: 'release-chef-11.10' , rel: 'apache2'
-
-# external
-#
-cookbook 'lvm',           '= 1.0.8'
-cookbook 'sensu',         '= 2.10.0'
-cookbook 'runit',         '= 1.5.10'
-cookbook 'java',          '= 1.29.0'
-cookbook 'nodejs',        '= 2.1.0'
-cookbook 'elasticsearch', '= 0.3.13'
-cookbook 'chef_handler',  '= 1.1.6'
-
-# mapzen wrappers
-#
-cookbook 'mapzen_sensu_clients',  git: 'git@github.com:mapzen/chef-mapzen_sensu_clients', tag: '0.12.0'
-cookbook 'mapzen_elasticsearch',  git: 'git@github.com:mapzen/chef-mapzen_elasticsearch', tag: '0.16.3'
-cookbook 'mapzen_logstash',       git: 'git@github.com:mapzen/chef-mapzen_logstash',      tag: '0.13.1'
-cookbook 'mapzen_graphite',       git: 'git@github.com:mapzen/chef-mapzen_graphite',      tag: '0.6.0'
-cookbook 'mapzen_pelias',         git: 'git@github.com:mapzen/chef-mapzen_pelias',        tag: '0.34.2'
-```
-
-If we placed that Berkshelf file in opsworks-elastic, in the prod-us-east branch, we would run `opzworks berks elastic::prod::us-east`, which would do the following:
-
-* build the berkshelf locally
-* push the resultant cookbook tarball to: s3://opzworks/elastic-prod-us-east/cookbooks.tgz
-* run `update_custom_cookbook` on the stack (unless you pass the `--no-update` flag)
-
-Your stack should be configured to use a berkshelf from an S3 archive. The url will look as below:
-
-    https://s3.amazonaws.com/opzworks/elastic-prod-us-east/cookbooks.tgz
-
-You'll need to set up an IAM user or users with permission to access the location.
 
 ## Contributing
 

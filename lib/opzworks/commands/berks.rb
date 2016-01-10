@@ -136,7 +136,12 @@ module OpzWorks
             hash[:stack_id] = @stack_id
             hash[:command]  = { name: 'update_custom_cookbooks' }
 
-            opsworks.create_deployment(hash)
+            begin
+              opsworks.create_deployment(hash)
+            rescue Aws::OpsWorks::Errors::ServiceError => e
+              puts "Caught error while attempting to trigger deployment: ".foreground(:red)
+              puts e
+            end
           else
             puts 'Update custom cookbooks skipped via --no-update switch.'.foreground(:blue)
           end

@@ -139,7 +139,7 @@ module OpzWorks
             begin
               opsworks.create_deployment(hash)
             rescue Aws::OpsWorks::Errors::ServiceError => e
-              puts "Caught error while attempting to trigger deployment: ".foreground(:red)
+              puts 'Caught error while attempting to trigger deployment: '.foreground(:red)
               puts e
             end
           else

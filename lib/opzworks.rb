@@ -1,9 +1,10 @@
 require 'opzworks/meta'
 require 'opzworks/config'
-require 'opzworks/commands/ssh'
-require 'opzworks/commands/json'
-require 'opzworks/commands/berks'
-require 'opzworks/commands/elastic'
+
+# require our commands
+%w(ssh json berks elastic).each do |cmd|
+  require "opzworks/commands/#{cmd}"
+end
 
 class String
   def unindent

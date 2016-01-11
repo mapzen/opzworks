@@ -17,7 +17,7 @@ def populate_stack(input, data = {})
     puts 'Found more than one stack matching input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
     return false
   else
-    @stack_json = match[:custom_json]
+    @stack_json = match[:custom_json] || ''
     @project    = match[:name].split('::').first
     @s3_path    = match[:name].gsub('::', '-')
     @stack_id   = match[:stack_id]

@@ -13,16 +13,20 @@ module OpzWorks
     def initialize
       file = ENV['AWS_CONFIG_FILE'] || "#{ENV['HOME']}/.aws/config"
 
-      fail 'AWS config file not found!'.foreground(:red) unless File.exist? file
+      # abort unless required conditions are met
+      abort "Config file #{file} not found, exiting!".foreground(:red) unless File.exist? file
       ini = IniFile.load(file)
+
+      abort "Could not find [opzworks] config block in #{file}, exiting!".foreground(:red) if ini['opzworks'].empty?
 
       # set the region and the profile we want to pick up from ~/.aws/credentials
       @aws_profile = ENV['AWS_PROFILE'] || 'default'
       @aws_region  = ENV['AWS_REGION'] || ini[@aws_profile]['region']
 
-      @ssh_user_name = ini['opzworks']['ssh-user-name'].strip
-      @berks_repository_path = ini['opzworks']['berks-repository-path'].strip
-
+      @ssh_user_name =
+        ini['opzworks']['ssh-user-name'].strip unless ini['opzworks']['ssh-user-name'].nil?
+      @berks_repository_path=
+        ini['opzworks']['berks-repository-path'].strip unless ini['opzworks']['berks-repository-path'].nil?
       @berks_base_path =
         ini['opzworks']['berks-base-path'].strip unless ini['opzworks']['berks-base-path'].nil?
       @berks_s3_bucket =

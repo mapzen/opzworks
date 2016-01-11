@@ -25,7 +25,7 @@ module OpzWorks
 
       @ssh_user_name =
         ini['opzworks']['ssh-user-name'].strip unless ini['opzworks']['ssh-user-name'].nil?
-      @berks_repository_path=
+      @berks_repository_path =
         ini['opzworks']['berks-repository-path'].strip unless ini['opzworks']['berks-repository-path'].nil?
       @berks_base_path =
         ini['opzworks']['berks-base-path'].strip unless ini['opzworks']['berks-base-path'].nil?

@@ -1,5 +1,5 @@
 module OpzWorks
-  VERSION     = '0.3.11'
+  VERSION     = '0.3.12'
   AUTHORS     = ['Grant Heffernan', 'Mapzen']
   EMAIL       = ['grant@mapzen.com']
   DESCRIPTION = 'OpzWorks Utilities'

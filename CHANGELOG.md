@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.4.2
+-----
+* standardize behavior of json and berks commands: changes in a dirty working opsworks repo will
+  be committed and pushed before the remote stack is updated
+
 0.4.0
 -----
 * add framework for opsworks cmd structure

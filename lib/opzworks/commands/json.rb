@@ -58,6 +58,9 @@ module OpzWorks
               puts 'Quiet mode detected. Pushing the following updated json:'.foreground(:yellow)
               puts diff_str
 
+              puts 'Committing changes and pushing'.foreground(:blue)
+              system "cd #{@target_path} && git commit -am 'stack update'; git push origin #{@branch}"
+
               client.update_stack(hash)
               puts 'Done!'.color(:green)
             else
@@ -66,6 +69,9 @@ module OpzWorks
               STDOUT.print "\nType ".foreground(:yellow) + 'yes '.foreground(:blue) + 'to continue, any other key will abort: '.foreground(:yellow)
               input = STDIN.gets.chomp
               if input =~ /^y/i
+                puts 'Committing changes and pushing'.foreground(:blue)
+                system "cd #{@target_path} && git commit -am 'stack update'; git push origin #{@branch}"
+
                 client.update_stack(hash)
                 puts 'Done!'.color(:green)
               else

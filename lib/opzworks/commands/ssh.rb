@@ -66,6 +66,7 @@ module OpzWorks
             if options[:raw]
               puts ip
             else
+              next if ip.nil?
               parameters = {
                 'Host'     => "#{instance[:hostname]}-#{stack_name}",
                 'HostName' => ip,

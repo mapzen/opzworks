@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.4.0
+-----
+* add framework for opsworks cmd structure
+* add list-stacks option
+
 0.3.9
 -----
 * add remote management berkshelf option back in: if there is a Berksfile.opsworks present in the

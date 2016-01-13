@@ -4,6 +4,8 @@ require 'opzworks'
 module OpzWorks
   class CLI
     def self.start
+      commands = %w(ssh cmd json berks elastic)
+
       Trollop.options do
         version "opzworks #{OpzWorks::VERSION} (c) #{OpzWorks::AUTHORS.join(', ')}"
         banner <<-EOS.unindent
@@ -13,6 +15,7 @@ module OpzWorks
 
           Commands
             ssh  #{OpzWorks::Commands::SSH.banner}
+            cmd  #{OpzWorks::Commands::CMD.banner}
             json #{OpzWorks::Commands::JSON.banner}
             berks #{OpzWorks::Commands::BERKS.banner}
             elastic #{OpzWorks::Commands::ELASTIC.banner}
@@ -22,7 +25,7 @@ module OpzWorks
 
           Options:
         EOS
-        stop_on @commands
+        stop_on commands
       end
 
       command = ARGV.shift
@@ -35,6 +38,8 @@ module OpzWorks
         OpzWorks::Commands::BERKS.run
       when 'elastic'
         OpzWorks::Commands::ELASTIC.run
+      when 'cmd'
+        OpzWorks::Commands::CMD.run
       when nil
         Trollop.die 'no command specified'
       else

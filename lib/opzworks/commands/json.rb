@@ -41,14 +41,19 @@ module OpzWorks
           next if var == false
 
           hash = {
-            'PROJECT:'  => @project,
-            'STACK ID:' => @stack_id,
-            'S3 PATH:'  => @s3_path,
-            'BRANCH:'   => @branch
+            'PROJECT:'      => @project,
+            'CHEF VERSION:' => @chef_version,
+            'STACK ID:'     => @stack_id,
+            'S3 PATH:'      => @s3_path,
+            'S3 URL:'       => @s3_source_url,
+            'BRANCH:'       => @branch
           }
           puts "\n"
+          puts '-------------------------------'
           hash.each { |k, v| printf("%-25s %-25s\n", k.foreground(:green), v.foreground(:red)) }
+          puts '-------------------------------'
 
+          puts "\n"
           var = manage_berks_repos
           next if var == false
 

@@ -20,12 +20,13 @@ def populate_stack(input, data = {})
     @stack_json     = match[:custom_json] || ''
     @project        = match[:name].split('::').first
     @s3_path        = match[:name].gsub('::', '-')
-    @stack_id       = match[:stack_id]
     @branch         = (match[:name].split('::')[1] + '-' + match[:name].split('::')[2]).gsub('::', '-')
+    @stack_id       = match[:stack_id]
     @arn            = match[:arn]
     @region         = match[:region]
     @default_subnet = match[:default_subnet_id]
     @default_os     = match[:default_os]
-    @chef_version   = match[:configuration_manager]
+    @chef_version   = match[:configuration_manager][:version]
+    @s3_source_url  = match[:custom_cookbooks_source][:url] || ''
   end
 end

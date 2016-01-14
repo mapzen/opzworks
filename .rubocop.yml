@@ -10,3 +10,5 @@ AbcSize:
   Enabled: false
 PerceivedComplexity:
   Enabled: false
+ClassLength:
+  Max: 150

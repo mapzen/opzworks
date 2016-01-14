@@ -17,19 +17,15 @@ def populate_stack(input, data = {})
     puts 'Found more than one stack matching input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
     return false
   else
-    @stack_json = match[:custom_json] || ''
-    @project    = match[:name].split('::').first
-    @s3_path    = match[:name].gsub('::', '-')
-    @stack_id   = match[:stack_id]
-    @branch     = (match[:name].split('::')[1] + '-' + match[:name].split('::')[2]).gsub('::', '-')
-
-    hash = {
-      'PROJECT:'  => @project,
-      'STACK ID:' => @stack_id,
-      'S3 PATH:'  => @s3_path,
-      'BRANCH:'   => @branch
-    }
-    puts "\n"
-    hash.each { |k, v| printf("%-25s %-25s\n", k.foreground(:green), v.foreground(:red)) }
+    @stack_json     = match[:custom_json] || ''
+    @project        = match[:name].split('::').first
+    @s3_path        = match[:name].gsub('::', '-')
+    @stack_id       = match[:stack_id]
+    @branch         = (match[:name].split('::')[1] + '-' + match[:name].split('::')[2]).gsub('::', '-')
+    @arn            = match[:arn]
+    @region         = match[:region]
+    @default_subnet = match[:default_subnet_id]
+    @default_os     = match[:default_os]
+    @chef_version   = match[:configuration_manager]
   end
 end

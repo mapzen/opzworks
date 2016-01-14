@@ -40,6 +40,15 @@ module OpzWorks
           var = populate_stack(opt, response)
           next if var == false
 
+          hash = {
+            'PROJECT:'  => @project,
+            'STACK ID:' => @stack_id,
+            'S3 PATH:'  => @s3_path,
+            'BRANCH:'   => @branch
+          }
+          puts "\n"
+          hash.each { |k, v| printf("%-25s %-25s\n", k.foreground(:green), v.foreground(:red)) }
+
           var = manage_berks_repos
           next if var == false
 

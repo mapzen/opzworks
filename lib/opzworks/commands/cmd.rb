@@ -15,7 +15,7 @@ module OpzWorks
           banner <<-EOS.unindent
             #{CMD.banner}
 
-              opzworks cmd [option]
+              opzworks cmd [--list-stacks]
 
             Options:
           EOS

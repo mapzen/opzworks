@@ -1,7 +1,7 @@
 changelog
 =========
 
-0.5.3
+0.5.2
 -----
 * remove detection of Berksfile.opsworks (for Chef 11.10 remote berkshelf management): not used, and will be deprecated.
 

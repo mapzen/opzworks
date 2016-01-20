@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.5.5
+-----
+* remove Berksfile.opsworks detection, deprecated
+
 0.5.1
 -----
 * remove detection of chef stack for update custom cookbooks... the cmdline flag rules

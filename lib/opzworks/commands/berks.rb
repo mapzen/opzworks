@@ -68,26 +68,17 @@ module OpzWorks
           s3_bucket        = config.berks_s3_bucket || 'opzworks'
           overrides        = 'overrides'
 
-          if File.exist?("#{@target_path}/Berksfile.opsworks")
-            puts 'Remote management berksfile detected, not building local berkshelf.'.foreground(:yellow)
-
-            unless File.directory?("#{install_path}")
-              FileUtils.mkdir_p("#{install_path}")
-            end
-            FileUtils.copy("#{@target_path}/Berksfile.opsworks", "#{install_path}/Berksfile")
-          else
-            # berks
-            #
-            puts 'Running berks install'.foreground(:blue)
-            run_local <<-BASH
-              cd #{@target_path}
-              berks update
-            BASH
-            run_local <<-BASH
-              cd #{@target_path}
-              berks vendor #{install_path}
-            BASH
-          end
+          # berks
+          #
+          puts 'Running berks install'.foreground(:blue)
+          run_local <<-BASH
+            cd #{@target_path}
+            berks update
+          BASH
+          run_local <<-BASH
+            cd #{@target_path}
+            berks vendor #{install_path}
+          BASH
 
           # if there's an overrides file, just pull it and stuff the contents into the
           #   upload repo; the line is assumed to be a git repo. This is done to override

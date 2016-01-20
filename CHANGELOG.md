@@ -1,6 +1,14 @@
 changelog
 =========
 
+0.5.1
+-----
+* remove detection of chef stack for update custom cookbooks... the cmdline flag rules
+
+0.5.0
+-----
+* commit Gemfile.lock
+
 0.4.2
 -----
 * standardize behavior of json and berks commands: changes in a dirty working opsworks repo will

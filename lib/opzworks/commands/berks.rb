@@ -143,22 +143,18 @@ module OpzWorks
           # update remote cookbooks
           #
           if options[:update] == true
-            if @chef_version.to_i > 11
-              puts "Skipping update_custom_cookbooks, this is stack is running Chef > 11 (#{@chef_version})".foreground(:blue)
-            else
-              puts "Triggering update_custom_cookbooks for remote stack (#{@stack_id})".foreground(:blue)
+            puts "Triggering update_custom_cookbooks for remote stack (#{@stack_id})".foreground(:blue)
 
-              hash = {}
-              hash[:comment]  = 'shake and bake'
-              hash[:stack_id] = @stack_id
-              hash[:command]  = { name: 'update_custom_cookbooks' }
+            hash = {}
+            hash[:comment]  = 'shake and bake'
+            hash[:stack_id] = @stack_id
+            hash[:command]  = { name: 'update_custom_cookbooks' }
 
-              begin
-                opsworks.create_deployment(hash)
-              rescue Aws::OpsWorks::Errors::ServiceError => e
-                puts 'Caught error while attempting to trigger deployment: '.foreground(:red)
-                puts e
-              end
+            begin
+              opsworks.create_deployment(hash)
+            rescue Aws::OpsWorks::Errors::ServiceError => e
+              puts 'Caught error while attempting to trigger deployment: '.foreground(:red)
+              puts e
             end
           else
             puts 'Update custom cookbooks skipped via --no-update switch.'.foreground(:blue)

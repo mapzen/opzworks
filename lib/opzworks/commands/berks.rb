@@ -69,7 +69,6 @@ module OpzWorks
           overrides        = 'overrides'
 
           FileUtils.mkdir_p("#{install_path}") unless File.directory?("#{install_path}")
-          FileUtils.copy("#{@target_path}/Berksfile.opsworks", "#{install_path}/Berksfile")
 
           # berks
           #

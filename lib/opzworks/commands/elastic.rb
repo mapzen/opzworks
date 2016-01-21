@@ -47,16 +47,14 @@ module OpzWorks
 
         # loops over inputs
         ARGV.each do |opt|
-          if options[:start]
-            var = es_get_input(opt, response, 'start')
-          else
-            var = es_get_input(opt, response)
-          end
+          var = if options[:start]
+                  es_get_input(opt, response, 'start')
+                else
+                  es_get_input(opt, response)
+                end
           next if var == false
 
-          if options[:old_service_name]
-            @service_name = 'elasticsearch'
-          end
+          options[:old_service_name] ? @service_name = 'elasticsearch' : false
 
           case options[:rolling]
           when true

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'aws-sdk'
 require 'trollop'
 require 'opzworks'
 
-SSH_PREFIX  = '# --- OpzWorks ---'
-SSH_POSTFIX = '# --- End of OpzWorks ---'
+SSH_PREFIX  = '# --- OpzWorks ---'.freeze
+SSH_POSTFIX = '# --- End of OpzWorks ---'.freeze
 
 module OpzWorks
   class Commands
@@ -57,11 +59,11 @@ module OpzWorks
           instances += result.instances.select { |i| i[:status] != 'stopped' }
 
           instances.map! do |instance|
-            if options[:private]
-              ip = instance[:private_ip]
-            else
-              instance[:elastic_ip].nil? ? ip = instance[:public_ip] : ip = instance[:elastic_ip]
-            end
+            ip = if options[:private]
+                   instance[:private_ip]
+                 else
+                   instance[:elastic_ip].nil? ? instance[:public_ip] : instance[:elastic_ip]
+                 end
 
             if options[:raw]
               puts ip
@@ -77,32 +79,29 @@ module OpzWorks
             end
           end
 
-          if options[:raw]
-            next
-          else
-            new_contents = "#{instances.join("\n")}\n"
+          next if options[:raw]
+          new_contents = "#{instances.join("\n")}\n"
 
-            if options[:update]
-              ssh_config = "#{ENV['HOME']}/.ssh/config"
-              old_contents = File.read(ssh_config)
+          if options[:update]
+            ssh_config = "#{ENV['HOME']}/.ssh/config"
+            old_contents = File.read(ssh_config)
 
-              if options[:backup]
-                backup_name = ssh_config + '.backup'
-                File.open(backup_name, 'w') { |file| file.puts old_contents }
-              end
-
-              File.open(ssh_config, 'w') do |file|
-                file.puts old_contents.gsub(
-                  /\n?\n?#{SSH_PREFIX}.*#{SSH_POSTFIX}\n?\n?/m,
-                  ''
-                )
-                file.puts new_contents
-              end
-
-              puts "Successfully updated #{ssh_config} with #{instances.length} instances!"
-            else
-              puts new_contents.strip
+            if options[:backup]
+              backup_name = ssh_config + '.backup'
+              File.open(backup_name, 'w') { |file| file.puts old_contents }
             end
+
+            File.open(ssh_config, 'w') do |file|
+              file.puts old_contents.gsub(
+                /\n?\n?#{SSH_PREFIX}.*#{SSH_POSTFIX}\n?\n?/m,
+                ''
+              )
+              file.puts new_contents
+            end
+
+            puts "Successfully updated #{ssh_config} with #{instances.length} instances!"
+          else
+            puts new_contents.strip
           end
         end
       end

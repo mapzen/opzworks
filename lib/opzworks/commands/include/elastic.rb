@@ -24,7 +24,7 @@ def es_get_input(input, data = {}, *cmd)
     puts 'Found more than one stack matching input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
     return false
   else
-    puts 'Operating on stack '.foreground(:blue) + "#{match[:name]}".foreground(:green)
+    puts 'Operating on stack '.foreground(:blue) + match[:name].to_s.foreground(:green)
     layers = @client.describe_layers(stack_id: match[:stack_id])
     layers[:layers].each { |layer| printf("%-30s %-50s\n", layer[:name], layer[:layer_id]) }
 
@@ -34,12 +34,12 @@ def es_get_input(input, data = {}, *cmd)
     unless cmd.include? 'start'
       STDOUT.print 'Disable shard allocation before starting? (true/false, default is true): '.foreground(:blue)
       disable_allocation = STDIN.gets.chomp
-      case disable_allocation
-      when 'false'
-        @disable_shard_allocation = false
-      else
-        @disable_shard_allocation = true
-      end
+      @disable_shard_allocation = case disable_allocation
+                                  when false
+                                    false
+                                  else
+                                    true
+                                  end
     end
 
     options = {}
@@ -49,7 +49,7 @@ def es_get_input(input, data = {}, *cmd)
     else
       options[:layer_id] = layer
       get_shortname = @client.describe_layers(layer_ids: [layer])
-      get_shortname[:layers].each { |layer| @service_name = layer[:shortname] }
+      get_shortname[:layers].each { |l| @service_name = l[:shortname] }
     end
     opsworks_list_ips(options)
   end
@@ -72,7 +72,7 @@ def es_enable_allocation(ip, type)
       end
       break
     rescue StandardError => e
-      puts 'Caught exception while trying to change allocation state: '.foreground(:yellow) + "#{e}".foreground(:red) + ', looping around...'.foreground(:yellow) if count == 0
+      puts 'Caught exception while trying to change allocation state: '.foreground(:yellow) + e.foreground(:red) + ', looping around...'.foreground(:yellow) if count == 0
       count += 1
       sleep 1
     end
@@ -96,7 +96,7 @@ def es_service(command, ips = [], service_name = 'elasticsearch')
 end
 
 def es_wait_for_status(ip, color)
-  puts 'Waiting for cluster to go '.foreground(:blue) + "#{color}".foreground(:"#{color}")
+  puts 'Waiting for cluster to go '.foreground(:blue) + color.foreground(:"#{color}")
   conn = Faraday.new(url: "http://#{ip}:9200") do |f|
     f.adapter :net_http
   end
@@ -112,14 +112,14 @@ def es_wait_for_status(ip, color)
       end
       json = JSON.parse response.body
     rescue StandardError => e
-      puts 'Caught exception while trying to check cluster status: '.foreground(:yellow) + "#{e}".foreground(:red) + ', looping around...'.foreground(:yellow) if rescue_count == 0
+      puts 'Caught exception while trying to check cluster status: '.foreground(:yellow) + e.foreground(:red) + ', looping around...'.foreground(:yellow) if rescue_count == 0
       rescue_count += 1
       printf '.'
       sleep 1
     else
       case json['status']
       when color
-        puts "\nCluster is now ".foreground(:blue) + "#{color}".foreground(:"#{color}")
+        puts "\nCluster is now ".foreground(:blue) + color.foreground(:"#{color}")
         break
       when 'green'
         puts "\nCluster is green, proceeding without waiting for requested status of #{color}".foreground(:green)
@@ -127,7 +127,7 @@ def es_wait_for_status(ip, color)
       else
         count += 1
         if count == 10
-          puts "\nStill waiting, cluster is currently ".foreground(:blue) + "#{json['status']}".foreground(:"#{json['status']}")
+          puts "\nStill waiting, cluster is currently ".foreground(:blue) + json['status'].to_s.foreground(:"#{json['status']}")
           count = 0
         end
         printf '.'

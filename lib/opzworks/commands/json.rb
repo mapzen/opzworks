@@ -67,30 +67,28 @@ module OpzWorks
 
           if diff_str.empty?
             puts 'There are no differences between the existing stack json and the json you\'re asking to push.'.foreground(:yellow)
-          else
-            if options[:quiet]
-              puts 'Quiet mode detected. Pushing the following updated json:'.foreground(:yellow)
-              puts diff_str
+          elsif options[:quiet]
+            puts 'Quiet mode detected. Pushing the following updated json:'.foreground(:yellow)
+            puts diff_str
 
+            puts 'Committing changes and pushing'.foreground(:blue)
+            system "cd #{@target_path} && git commit -am 'stack update'; git push origin #{@branch}"
+
+            client.update_stack(hash)
+            puts 'Done!'.color(:green)
+          else
+            puts "The following is a partial diff of the existing stack json and the json you're asking to push:".foreground(:yellow)
+            puts diff_str
+            STDOUT.print "\nType ".foreground(:yellow) + 'yes '.foreground(:blue) + 'to continue, any other key will abort: '.foreground(:yellow)
+            input = STDIN.gets.chomp
+            if input =~ /^y/i
               puts 'Committing changes and pushing'.foreground(:blue)
               system "cd #{@target_path} && git commit -am 'stack update'; git push origin #{@branch}"
 
               client.update_stack(hash)
               puts 'Done!'.color(:green)
             else
-              puts "The following is a partial diff of the existing stack json and the json you're asking to push:".foreground(:yellow)
-              puts diff_str
-              STDOUT.print "\nType ".foreground(:yellow) + 'yes '.foreground(:blue) + 'to continue, any other key will abort: '.foreground(:yellow)
-              input = STDIN.gets.chomp
-              if input =~ /^y/i
-                puts 'Committing changes and pushing'.foreground(:blue)
-                system "cd #{@target_path} && git commit -am 'stack update'; git push origin #{@branch}"
-
-                client.update_stack(hash)
-                puts 'Done!'.color(:green)
-              else
-                puts 'Update skipped.'.foreground(:red)
-              end
+              puts 'Update skipped.'.foreground(:red)
             end
           end
         end

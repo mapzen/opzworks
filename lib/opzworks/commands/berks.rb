@@ -62,9 +62,9 @@ module OpzWorks
 
           berks_cook_path  = config.berks_base_path || '/tmp'
           cook_path        = "#{berks_cook_path}/#{@project}-#{@branch}"
-          install_path     = "#{cook_path}" + '/' + "cookbooks-#{@project}-#{@branch}"
+          install_path     = cook_path + '/' + "cookbooks-#{@project}-#{@branch}"
           cookbook_tarball = config.berks_tarball_name || 'cookbooks.tgz'
-          cookbook_upload  = "#{cook_path}" + '/' "#{cookbook_tarball}"
+          cookbook_upload  = cook_path + '/' "#{cookbook_tarball}"
           s3_bucket        = config.berks_s3_bucket || 'opzworks'
           overrides        = 'overrides'
 
@@ -89,9 +89,7 @@ module OpzWorks
           #     custom nginx.conf.erb in it.
           #
           if File.file?("#{@target_path}/#{overrides}")
-            unless File.directory?("#{install_path}")
-              FileUtils.mkdir_p("#{install_path}")
-            end
+            FileUtils.mkdir_p(install_path) unless File.directory?(install_path)
             File.open("#{@target_path}/#{overrides}") do |f|
               f.each_line do |line|
                 puts "Copying override #{line}".foreground(:blue)
@@ -104,7 +102,7 @@ module OpzWorks
           system "cd #{@target_path} && git commit -am 'berks update'; git push origin #{@branch}"
 
           puts 'Creating tarball of cookbooks'.foreground(:blue)
-          FileUtils.mkdir_p("#{cook_path}")
+          FileUtils.mkdir_p(cook_path)
           run_local "tar czf #{cookbook_upload} -C #{install_path} ."
 
           # upload
@@ -113,12 +111,12 @@ module OpzWorks
 
           begin
             obj = s3.bucket(s3_bucket).object("#{@s3_path}/#{cookbook_tarball}")
-            obj.upload_file("#{cookbook_upload}")
+            obj.upload_file(cookbook_upload)
           rescue StandardError => e
             puts "Caught exception while uploading to S3 bucket #{s3_bucket}: #{e}".foreground(:red)
             puts 'Cleaning up before exiting'.foreground(:blue)
-            FileUtils.rm("#{cookbook_upload}")
-            FileUtils.rm_rf("#{install_path}")
+            FileUtils.rm(cookbook_upload)
+            FileUtils.rm_rf(install_path)
             abort
           else
             puts "Completed successful upload of #{@s3_path}/#{cookbook_tarball} to #{s3_bucket}!".foreground(:green)
@@ -127,8 +125,8 @@ module OpzWorks
           # cleanup
           #
           puts 'Cleaning up'.foreground(:blue)
-          FileUtils.rm("#{cookbook_upload}")
-          FileUtils.rm_rf("#{install_path}")
+          FileUtils.rm(cookbook_upload)
+          FileUtils.rm_rf(install_path)
           puts 'Done!'.foreground(:green)
 
           # update remote cookbooks

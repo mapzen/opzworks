@@ -31,6 +31,7 @@ module OpzWorks
           opt :stop, 'Stop Elastic', default: false
           opt :bounce, 'Bounce (stop/start) Elastic', default: false
           opt :rolling, 'Perform a rolling restart of Elastic', default: false
+          opt :old_service_name, "Use 'elasticsearch' as the service name, otherwise use the layer shortname", default: false
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
@@ -53,6 +54,10 @@ module OpzWorks
           end
           next if var == false
 
+          if options[:old_service_name]
+            @service_name = 'elasticsearch'
+          end
+
           case options[:rolling]
           when true
             # cycle through all the hosts, waiting for status
@@ -65,7 +70,7 @@ module OpzWorks
                 sleep 2
               end
 
-              es_service('restart', [ip])
+              es_service('restart', [ip], @service_name)
               es_wait_for_status(ip, 'yellow')
               es_enable_allocation(ip, 'all') if @disable_shard_allocation
               es_wait_for_status(ip, 'green')
@@ -74,7 +79,7 @@ module OpzWorks
 
           case options[:start]
           when true
-            es_service('start', @ip_addrs)
+            es_service('start', @ip_addrs, @service_name)
 
             @ip_addrs.each do |ip|
               es_wait_for_status(ip, 'green')
@@ -89,7 +94,7 @@ module OpzWorks
               sleep 2
             end
 
-            es_service('stop', @ip_addrs)
+            es_service('stop', @ip_addrs, @service_name)
           end
 
           case options[:bounce]
@@ -100,7 +105,7 @@ module OpzWorks
               sleep 2
             end
 
-            es_service('restart', @ip_addrs)
+            es_service('restart', @ip_addrs, @service_name)
 
             es_wait_for_status(@ip_addrs.first, 'yellow')
             es_enable_allocation(@ip_addrs.first, 'all') if @disable_shard_allocation

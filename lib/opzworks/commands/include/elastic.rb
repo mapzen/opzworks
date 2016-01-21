@@ -48,6 +48,8 @@ def es_get_input(input, data = {}, *cmd)
       return false
     else
       options[:layer_id] = layer
+      get_shortname = @client.describe_layers(layer_ids: [layer])
+      get_shortname[:layers].each { |layer| @service_name = layer[:shortname] }
     end
     opsworks_list_ips(options)
   end
@@ -77,7 +79,7 @@ def es_enable_allocation(ip, type)
   end
 end
 
-def es_service(command, ips = [])
+def es_service(command, ips = [], service_name = 'elasticsearch')
   puts "Operating on ES with command #{command}".foreground(:yellow)
   user = ENV['USER']
 
@@ -87,7 +89,7 @@ def es_service(command, ips = [])
     end
 
     Timeout.timeout(10) do
-      session.exec "sudo service elasticsearch #{command}"
+      session.exec "sudo service #{service_name} #{command}"
     end
     session.loop
   end

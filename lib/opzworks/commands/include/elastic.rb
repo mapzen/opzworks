@@ -35,7 +35,7 @@ def es_get_input(input, data = {}, *cmd)
       STDOUT.print 'Disable shard allocation before starting? (true/false, default is true): '.foreground(:blue)
       disable_allocation = STDIN.gets.chomp
       @disable_shard_allocation = case disable_allocation
-                                  when false
+                                  when 'false'
                                     false
                                   else
                                     true
@@ -72,7 +72,7 @@ def es_enable_allocation(ip, type)
       end
       break
     rescue StandardError => e
-      puts 'Caught exception while trying to change allocation state: '.foreground(:yellow) + e.foreground(:red) + ', looping around...'.foreground(:yellow) if count == 0
+      puts 'Caught exception while trying to change allocation state: '.foreground(:yellow) + e.to_s.foreground(:red) + ', looping around...'.foreground(:yellow) if count == 0
       count += 1
       sleep 1
     end
@@ -112,7 +112,7 @@ def es_wait_for_status(ip, color)
       end
       json = JSON.parse response.body
     rescue StandardError => e
-      puts 'Caught exception while trying to check cluster status: '.foreground(:yellow) + e.foreground(:red) + ', looping around...'.foreground(:yellow) if rescue_count == 0
+      puts 'Caught exception while trying to check cluster status: '.foreground(:yellow) + e.to_s.foreground(:red) + ', looping around...'.foreground(:yellow) if rescue_count == 0
       rescue_count += 1
       printf '.'
       sleep 1

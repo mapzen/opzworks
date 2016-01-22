@@ -28,7 +28,8 @@ module OpzWorks
             Options:
           EOS
           opt :quiet, 'Update the stack json without confirmation', short: 'q', default: false
-          opt :context, 'Change the number lines of diff context to show', short: 'c', default: 5
+          opt :context, 'Change the number lines of diff context to show', default: 5
+          opt :clone, 'Just clone the management repo then exit', short: 'c', default: false
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
@@ -56,6 +57,7 @@ module OpzWorks
           puts "\n"
           var = manage_berks_repos
           next if var == false
+          next if options[:clone] == true
 
           json = File.read("#{@target_path}/stack.json")
           diff = Diffy::Diff.new(@stack_json + "\n", json, context: options[:context])

@@ -27,6 +27,7 @@ module OpzWorks
             Options:
           EOS
           opt :update, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: true
+          opt :clone, 'Only clone the management repo, then exit.', short: 'c', default: false
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
@@ -59,6 +60,7 @@ module OpzWorks
           puts "\n"
           var = manage_berks_repos
           next if var == false
+          next if options[:clone] == true
 
           berks_cook_path  = config.berks_base_path || '/tmp'
           cook_path        = "#{berks_cook_path}/#{@project}-#{@branch}"

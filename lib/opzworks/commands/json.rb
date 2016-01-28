@@ -79,7 +79,7 @@ module OpzWorks
             client.update_stack(hash)
             puts 'Done!'.color(:green)
           else
-            puts "The following is a partial diff of the existing stack json and the json you're asking to push:".foreground(:yellow)
+            puts "\nThe following is a partial diff of the existing stack json and the json you're asking to push:".foreground(:yellow)
             puts diff_str
             STDOUT.print "\nType ".foreground(:yellow) + 'yes '.foreground(:blue) + 'to continue, any other key will abort: '.foreground(:yellow)
             input = STDIN.gets.chomp

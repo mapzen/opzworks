@@ -72,11 +72,22 @@ module OpzWorks
 
           # berks
           #
-          puts 'Running berks install'.foreground(:blue)
+          if !File.exist?("#{@target_path}/Berksfile.lock")
+            puts "\nNo Berksfile.lock, running berks install before vendoring".foreground(:blue)
+            run_local <<-BASH
+              cd #{@target_path}
+              berks install
+              git add Berksfile.lock
+            BASH
+          end
+
+          puts "\nUpdating the berkshelf".foreground(:blue)
           run_local <<-BASH
             cd #{@target_path}
             berks update
           BASH
+
+          puts "\nVendoring the berkshelf".foreground(:blue)
           run_local <<-BASH
             cd #{@target_path}
             berks vendor #{install_path}

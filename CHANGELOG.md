@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.6.3
+-----
+* support for missing Berksfile.lock, such as when starting a new project
+
 0.5.5
 -----
 * remove Berksfile.opsworks detection, deprecated

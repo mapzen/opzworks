@@ -72,7 +72,7 @@ module OpzWorks
 
           # berks
           #
-          if !File.exist?("#{@target_path}/Berksfile.lock")
+          unless File.exist?("#{@target_path}/Berksfile.lock")
             puts "\nNo Berksfile.lock, running berks install before vendoring".foreground(:blue)
             run_local <<-BASH
               cd #{@target_path}

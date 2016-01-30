@@ -25,13 +25,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'aws-sdk', '~> 2.2.7'
+  spec.add_dependency 'aws-sdk', '~> 2.2.13'
   spec.add_dependency 'trollop', '~> 2.0'
-  spec.add_dependency 'inifile', '~> 2.0.2'
+  spec.add_dependency 'inifile', '~> 3.0.0'
   spec.add_dependency 'diffy',   '~> 3.1.0'
   spec.add_dependency 'rainbow', '~> 2.0.0'
   spec.add_dependency 'faraday', '~> 0.9.2'
-  spec.add_dependency 'net-ssh', '~> 3.0.1'
+  spec.add_dependency 'net-ssh', '~> 3.0.2'
   spec.add_dependency 'net-ssh-multi', '~> 1.2.1'
 
   spec.add_development_dependency 'rubocop', '~> 0.36.0'

@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.7.3
+-----
+* bundle update
+* bump rubocop to 0.37.0
+
 0.7.2
 -----
 * improved formatting and messaging for json cmd output

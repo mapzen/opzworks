@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.7.0
+-----
+* use `berks package` rather than vendor and archive
+* dump overrides support
+
 0.6.3
 -----
 * support for missing Berksfile.lock, such as when starting a new project

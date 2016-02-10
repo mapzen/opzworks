@@ -64,16 +64,16 @@ module OpzWorks
 
           berks_cook_path  = config.berks_base_path || '/tmp'
           cook_path        = "#{berks_cook_path}/#{@project}-#{@branch}"
-          install_path     = cook_path + '/' + "cookbooks-#{@project}-#{@branch}"
           cookbook_tarball = config.berks_tarball_name || 'cookbooks.tgz'
           cookbook_upload  = cook_path + '/' "#{cookbook_tarball}"
           s3_bucket        = config.berks_s3_bucket || 'opzworks'
-          overrides        = 'overrides'
+
+          FileUtils.mkdir_p(cook_path) unless File.exist?(cook_path)
 
           # berks
           #
           unless File.exist?("#{@target_path}/Berksfile.lock")
-            puts "\nNo Berksfile.lock, running berks install before vendoring".foreground(:blue)
+            puts "\nNo Berksfile.lock, running berks install before packaging".foreground(:blue)
             run_local <<-BASH
               cd #{@target_path}
               berks install
@@ -87,40 +87,18 @@ module OpzWorks
             berks update
           BASH
 
-          puts "\nVendoring the berkshelf".foreground(:blue)
+          puts "\nPackaging the berkshelf".foreground(:blue)
           run_local <<-BASH
             cd #{@target_path}
-            berks vendor #{install_path}
+            berks package #{cook_path}/#{cookbook_tarball}
           BASH
 
-          # if there's an overrides file, just pull it and stuff the contents into the
-          #   upload repo; the line is assumed to be a git repo. This is done to override
-          #   opsworks templates without destroying the upstream cookbook.
-          #
-          #   For example, to override the default nginx cookbook's nginx.conf, create a git
-          #     repo with the directory structure nginx/templates/default and place your
-          #     custom nginx.conf.erb in it.
-          #
-          if File.file?("#{@target_path}/#{overrides}")
-            FileUtils.mkdir_p(install_path) unless File.directory?(install_path)
-            File.open("#{@target_path}/#{overrides}") do |f|
-              f.each_line do |line|
-                puts "Copying override #{line}".foreground(:blue)
-                `cd #{install_path} && git clone #{line}`
-              end
-            end
-          end
-
-          puts 'Committing changes and pushing'.foreground(:blue)
+          puts "\nCommitting changes and pushing".foreground(:blue)
           system "cd #{@target_path} && git commit -am 'berks update'; git push origin #{@branch}"
-
-          puts 'Creating tarball of cookbooks'.foreground(:blue)
-          FileUtils.mkdir_p(cook_path)
-          run_local "tar czf #{cookbook_upload} -C #{install_path} ."
 
           # upload
           #
-          puts 'Uploading to S3'.foreground(:blue)
+          puts "\nUploading to S3".foreground(:blue)
 
           begin
             obj = s3.bucket(s3_bucket).object("#{@s3_path}/#{cookbook_tarball}")
@@ -129,7 +107,7 @@ module OpzWorks
             puts "Caught exception while uploading to S3 bucket #{s3_bucket}: #{e}".foreground(:red)
             puts 'Cleaning up before exiting'.foreground(:blue)
             FileUtils.rm(cookbook_upload)
-            FileUtils.rm_rf(install_path)
+            FileUtils.rm_rf(cook_path)
             abort
           else
             puts "Completed successful upload of #{@s3_path}/#{cookbook_tarball} to #{s3_bucket}!".foreground(:green)
@@ -139,7 +117,7 @@ module OpzWorks
           #
           puts 'Cleaning up'.foreground(:blue)
           FileUtils.rm(cookbook_upload)
-          FileUtils.rm_rf(install_path)
+          FileUtils.rm_rf(cook_path)
           puts 'Done!'.foreground(:green)
 
           # update remote cookbooks

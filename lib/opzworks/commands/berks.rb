@@ -106,9 +106,8 @@ module OpzWorks
           rescue StandardError => e
             puts "Caught exception while uploading to S3 bucket #{s3_bucket}:".foreground(:red)
             puts "\t#{e}"
-            puts 'Cleaning up before exiting'.foreground(:blue)
+            puts "\nCleaning up before exiting".foreground(:blue)
 
-            FileUtils.rm(cookbook_upload)
             FileUtils.rm_rf(cook_path)
             abort
           else
@@ -117,15 +116,14 @@ module OpzWorks
 
           # cleanup
           #
-          puts 'Cleaning up'.foreground(:blue)
-          FileUtils.rm(cookbook_upload)
+          puts "\nCleaning up".foreground(:blue)
           FileUtils.rm_rf(cook_path)
           puts 'Done!'.foreground(:green)
 
           # update remote cookbooks
           #
           if options[:update] == true
-            puts "Triggering update_custom_cookbooks for remote stack (#{@stack_id})".foreground(:blue)
+            puts "\nTriggering update_custom_cookbooks for remote stack (#{@stack_id})".foreground(:blue)
 
             hash = {}
             hash[:comment]  = 'shake and bake'
@@ -137,6 +135,8 @@ module OpzWorks
             rescue Aws::OpsWorks::Errors::ServiceError => e
               puts 'Caught error while attempting to trigger deployment: '.foreground(:red)
               puts "\t#{e}"
+            else
+              puts 'Done!'.foreground(:green)
             end
           else
             puts 'Update custom cookbooks skipped via --no-update switch.'.foreground(:blue)

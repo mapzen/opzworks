@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.7.1
+-----
+* more output formatting cleanup
+* remove superflous cleanup commands
+
 0.7.0
 -----
 * use `berks package` rather than vendor and archive

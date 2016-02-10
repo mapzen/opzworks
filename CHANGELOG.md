@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.7.2
+-----
+* improved formatting and messaging for json cmd output
+
 0.7.1
 -----
 * more output formatting cleanup

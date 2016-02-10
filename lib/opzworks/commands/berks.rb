@@ -104,8 +104,10 @@ module OpzWorks
             obj = s3.bucket(s3_bucket).object("#{@s3_path}/#{cookbook_tarball}")
             obj.upload_file(cookbook_upload)
           rescue StandardError => e
-            puts "Caught exception while uploading to S3 bucket #{s3_bucket}: #{e}".foreground(:red)
+            puts "Caught exception while uploading to S3 bucket #{s3_bucket}:".foreground(:red)
+            puts "\t#{e}"
             puts 'Cleaning up before exiting'.foreground(:blue)
+
             FileUtils.rm(cookbook_upload)
             FileUtils.rm_rf(cook_path)
             abort
@@ -134,7 +136,7 @@ module OpzWorks
               opsworks.create_deployment(hash)
             rescue Aws::OpsWorks::Errors::ServiceError => e
               puts 'Caught error while attempting to trigger deployment: '.foreground(:red)
-              puts e
+              puts "\t#{e}"
             end
           else
             puts 'Update custom cookbooks skipped via --no-update switch.'.foreground(:blue)

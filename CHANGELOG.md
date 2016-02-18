@@ -4,6 +4,7 @@ changelog
 0.8.0
 -----
 * change in behavior: `berks update` is now no longer the default, and will be skipped unless the --update flag is passed explicitly. This is to prevent unwanted updating of unpinned cookbooks. However, you must now be sure to pass --update when the situation requires it.
+* to all the short option of -u for `berks update`, the `update_custom_cookbooks` flag is now -ucc
 
 0.7.3
 -----

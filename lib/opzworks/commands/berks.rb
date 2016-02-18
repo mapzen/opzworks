@@ -26,7 +26,8 @@ module OpzWorks
 
             Options:
           EOS
-          opt :update, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: true
+          opt :ucc, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: true
+          opt :update, 'Run berks update before packaging the Berkshelf.', default: false, short: 'u'
           opt :clone, 'Only clone the management repo, then exit.', short: 'c', default: false
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
@@ -81,11 +82,15 @@ module OpzWorks
             BASH
           end
 
-          puts "\nUpdating the berkshelf".foreground(:blue)
-          run_local <<-BASH
-            cd #{@target_path}
-            berks update
-          BASH
+          if options[:update] == true
+            puts "\nUpdating the berkshelf".foreground(:blue)
+            run_local <<-BASH
+              cd #{@target_path}
+              berks update
+            BASH
+          else
+            puts "\nNot running berks update".foreground(:blue)
+          end
 
           puts "\nPackaging the berkshelf".foreground(:blue)
           run_local <<-BASH
@@ -122,7 +127,7 @@ module OpzWorks
 
           # update remote cookbooks
           #
-          if options[:update] == true
+          if options[:ucc] == true
             puts "\nTriggering update_custom_cookbooks for remote stack (#{@stack_id})".foreground(:blue)
 
             hash = {}
@@ -139,7 +144,7 @@ module OpzWorks
               puts 'Done!'.foreground(:green)
             end
           else
-            puts 'Update custom cookbooks skipped via --no-update switch.'.foreground(:blue)
+            puts 'Update custom cookbooks skipped via --no-ucc switch.'.foreground(:blue)
           end
         end
       end

@@ -1,6 +1,12 @@
 changelog
 =========
 
+0.9.0
+-----
+* allow updating only specific cookbooks in the berkshelf: when passing the `-u` update flag, you can now also specify a space delimited list of cookbooks following a `-c` switch (`-u` alone will continue to run `berks update` for the entire berksfile):
+
+e.g. `opzworks berks -u -c mapzen_transitland sensu`
+
 0.8.0
 -----
 * change in behavior: `berks update` is now no longer the default, and will be skipped unless the --update flag is passed explicitly. This is to prevent unwanted updating of unpinned cookbooks. However, you must now be sure to pass --update when the situation requires it.

@@ -28,7 +28,8 @@ module OpzWorks
           EOS
           opt :ucc, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: true
           opt :update, 'Run berks update before packaging the Berkshelf.', default: false, short: 'u'
-          opt :clone, 'Only clone the management repo, then exit.', short: 'c', default: false
+          opt :cookbooks, 'Run berks update only for the specified cookbooks', type: :strings, default: nil, short: 'c'
+          opt :clone, 'Only clone the management repo, then exit.', default: false
         end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
@@ -83,11 +84,19 @@ module OpzWorks
           end
 
           if options[:update] == true
-            puts "\nUpdating the berkshelf".foreground(:blue)
-            run_local <<-BASH
-              cd #{@target_path}
-              berks update
-            BASH
+            unless options[:cookbooks].nil?
+              puts "\nUpdating the berkshelf for cookbook(s) ".foreground(:blue) + "#{options[:cookbooks].join(', ')}".foreground(:green)
+              run_local <<-BASH
+                cd #{@target_path}
+                berks update #{options[:cookbooks].join(' ')}
+              BASH
+            else
+              puts "\nUpdating the berkshelf".foreground(:blue)
+              run_local <<-BASH
+                cd #{@target_path}
+                berks update
+              BASH
+            end
           else
             puts "\nNot running berks update".foreground(:blue)
           end

@@ -84,17 +84,17 @@ module OpzWorks
           end
 
           if options[:update] == true
-            unless options[:cookbooks].nil?
-              puts "\nUpdating the berkshelf for cookbook(s) ".foreground(:blue) + "#{options[:cookbooks].join(', ')}".foreground(:green)
-              run_local <<-BASH
-                cd #{@target_path}
-                berks update #{options[:cookbooks].join(' ')}
-              BASH
-            else
+            if options[:cookbooks].nil?
               puts "\nUpdating the berkshelf".foreground(:blue)
               run_local <<-BASH
                 cd #{@target_path}
                 berks update
+              BASH
+            else
+              puts "\nUpdating the berkshelf for cookbook(s) ".foreground(:blue) + options[:cookbooks].join(', ').to_s.foreground(:green)
+              run_local <<-BASH
+                cd #{@target_path}
+                berks update #{options[:cookbooks].join(' ')}
               BASH
             end
           else

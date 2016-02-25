@@ -91,7 +91,7 @@ module OpzWorks
                 berks update
               BASH
             else
-              puts "\nUpdating the berkshelf for cookbook(s) ".foreground(:blue) + options[:cookbooks].join(', ').to_s.foreground(:green)
+              puts "\nUpdating the berkshelf for cookbook(s): ".foreground(:blue) + options[:cookbooks].join(', ').to_s.foreground(:green)
               run_local <<-BASH
                 cd #{@target_path}
                 berks update #{options[:cookbooks].join(' ')}

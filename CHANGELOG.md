@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.10.0
+------
+* allow override of default [opzworks] config block via ENV var: `OPZWORKS_PROFILE`
+* better error handling if passed a missing `AWS_PROFILE`
+
 0.9.0
 -----
 * allow updating only specific cookbooks in the berkshelf: when passing the `-u` update flag, you can now also specify a space delimited list of cookbooks following a `-c` switch (`-u` alone will continue to run `berks update` for the entire berksfile):

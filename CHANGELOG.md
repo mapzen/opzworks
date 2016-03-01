@@ -1,6 +1,12 @@
 changelog
 =========
 
+0.11.0
+------
+* opzworks config file moved out of ~/.aws/config to ~/.opzworks/config
+* default opzworks config block is now assumed to be `[default]` (previously `[opzworks]`)
+* overriding of selected opzworks profile is done via ENV: `OPZWORKS_PROFILE=something`
+
 0.10.0
 ------
 * allow override of default [opzworks] config block via ENV var: `OPZWORKS_PROFILE`

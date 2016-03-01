@@ -23,7 +23,7 @@ module OpzWorks
       # set the region and the profile we want to pick up from ~/.aws/credentials
       @aws_profile = ENV['AWS_PROFILE'] || 'default'
       abort "Could not find [#{@aws_profile}] config block in #{file}, exiting!".foreground(:red) if ini[@aws_profile].empty?
-      @aws_region  = ENV['AWS_REGION'] || ini[@aws_profile]['region']
+      @aws_region = ENV['AWS_REGION'] || ini[@aws_profile]['region']
 
       @ssh_user_name =
         ini[@opzworks_profile]['ssh-user-name'].strip unless ini[@opzworks_profile]['ssh-user-name'].nil?

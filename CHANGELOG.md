@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.11.1
+------
+* bump aws-sdk dependency
+* bundle update
+
 0.11.0
 ------
 * opzworks config file moved out of ~/.aws/config to ~/.opzworks/config

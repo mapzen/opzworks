@@ -65,7 +65,7 @@ module OpzWorks
           next if var == false
           next if options[:clone] == true
 
-          time             = Time.new.utc.strftime("%FT%TZ")
+          time             = Time.new.utc.strftime('%FT%TZ')
           berks_cook_path  = config.berks_base_path || '/tmp'
           cook_path        = "#{berks_cook_path}/#{@project}-#{@branch}"
           cookbook_tarball = config.berks_tarball_name || 'cookbooks.tgz'
@@ -114,15 +114,16 @@ module OpzWorks
 
           # backup previous if it exists
           #
+          puts "\nBackup".foreground(:blue)
           begin
             s3_client.head_object(
               bucket: s3_bucket,
               key: "#{@s3_path}/#{cookbook_tarball}"
             )
-          rescue Aws::S3::Errors::ServiceError => e
+          rescue Aws::S3::Errors::ServiceError =>
             puts "No existing #{cookbook_tarball} in #{s3_bucket} to backup, continuing...".foreground(:yellow)
           else
-            puts "Backing up #{cookbook_tarball} to #{@s3_path}/#{cookbook_tarball}-#{time}".foreground(:green)
+            puts "Backing up existing #{cookbook_tarball} to #{@s3_path}/#{cookbook_tarball}-#{time}".foreground(:green)
             begin
               s3_client.copy_object(
                 key: "#{@s3_path}/#{cookbook_tarball}-#{time}",
@@ -137,9 +138,8 @@ module OpzWorks
           end
 
           # upload
+          puts "\nUploading to S3".foreground(:blue)
           begin
-            puts "\nUploading to S3".foreground(:blue)
-
             obj = s3.bucket(s3_bucket).object("#{@s3_path}/#{cookbook_tarball}")
             obj.upload_file(cookbook_upload)
           rescue Aws::S3::Errors::ServiceError => e

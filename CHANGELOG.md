@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.12.1
+------
+* lint
+
 0.12.0
 ------
 * update aws-sdk dependency to 2.2.37

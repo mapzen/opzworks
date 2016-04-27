@@ -37,6 +37,7 @@ module OpzWorks
 
         aws_credentials_provider = Aws::SharedCredentials.new(profile_name: config.aws_profile)
         s3 = Aws::S3::Resource.new(region: config.aws_region, credentials: aws_credentials_provider)
+        s3_client = Aws::S3::Client.new(region: config.aws_region, credentials: aws_credentials_provider)
 
         opsworks = Aws::OpsWorks::Client.new(region: config.aws_region, profile: config.aws_profile)
         response = opsworks.describe_stacks
@@ -64,6 +65,7 @@ module OpzWorks
           next if var == false
           next if options[:clone] == true
 
+          time             = Time.new.utc.strftime("%FT%TZ")
           berks_cook_path  = config.berks_base_path || '/tmp'
           cook_path        = "#{berks_cook_path}/#{@project}-#{@branch}"
           cookbook_tarball = config.berks_tarball_name || 'cookbooks.tgz'
@@ -110,14 +112,37 @@ module OpzWorks
           puts "\nCommitting changes and pushing".foreground(:blue)
           system "cd #{@target_path} && git commit -am 'berks update'; git push origin #{@branch}"
 
-          # upload
+          # backup previous if it exists
           #
-          puts "\nUploading to S3".foreground(:blue)
-
           begin
+            s3_client.head_object(
+              bucket: s3_bucket,
+              key: "#{@s3_path}/#{cookbook_tarball}"
+            )
+          rescue Aws::S3::Errors::ServiceError => e
+            puts "No existing #{cookbook_tarball} in #{s3_bucket} to backup, continuing...".foreground(:yellow)
+          else
+            puts "Backing up #{cookbook_tarball} to #{@s3_path}/#{cookbook_tarball}-#{time}".foreground(:green)
+            begin
+              s3_client.copy_object(
+                key: "#{@s3_path}/#{cookbook_tarball}-#{time}",
+                bucket: s3_bucket,
+                copy_source: "#{s3_bucket}/#{@s3_path}/#{cookbook_tarball}"
+              )
+            rescue Aws::S3::Errors::ServiceError => e
+              puts "Caught exception trying to backup existing #{cookbook_tarball} in #{s3_bucket}:".foreground(:red)
+              puts "\t#{e}"
+              abort
+            end
+          end
+
+          # upload
+          begin
+            puts "\nUploading to S3".foreground(:blue)
+
             obj = s3.bucket(s3_bucket).object("#{@s3_path}/#{cookbook_tarball}")
             obj.upload_file(cookbook_upload)
-          rescue StandardError => e
+          rescue Aws::S3::Errors::ServiceError => e
             puts "Caught exception while uploading to S3 bucket #{s3_bucket}:".foreground(:red)
             puts "\t#{e}"
             puts "\nCleaning up before exiting".foreground(:blue)

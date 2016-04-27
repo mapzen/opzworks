@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.12.0
+------
+* update aws-sdk dependency to 2.2.37
+* create backups of cookbook tarball before uploading new
+
 0.11.1
 ------
 * bump aws-sdk dependency

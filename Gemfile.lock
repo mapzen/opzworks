@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    opzworks (0.11.1)
+    opzworks (0.12.2)
       aws-sdk (~> 2.2.37)
       diffy (~> 3.1.0)
       faraday (~> 0.9.2)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def manage_berks_repos
   config = OpzWorks.config
   @target_path = File.expand_path(config.berks_repository_path + "/opsworks-#{@project}", File.dirname(__FILE__))

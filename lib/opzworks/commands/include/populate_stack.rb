@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def populate_stack(input, data = {})
   # loops over inputs
   match = {}

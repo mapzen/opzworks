@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'aws-sdk'
 require 'trollop'
 require 'opzworks'
@@ -147,12 +149,12 @@ module OpzWorks
             puts "\t#{e}"
           else
             backup_arr = []
-            cull.contents.each { |k,v| backup_arr << k.key }
+            cull.contents.each { |k| backup_arr << k.key }
             backup_arr.pop(5) # keep last 5 backups
 
-            if backup_arr.length != 0
+            unless backup_arr.empty?
               delete_arr = []
-              while backup_arr.length > 0 
+              until backup_arr.empty?
                 puts "Adding backup #{backup_arr[0]} to the cull list".foreground(:green)
                 delete_arr << backup_arr.pop
 

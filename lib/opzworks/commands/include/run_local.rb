@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # wrap run_locally so we can catch failures
 def run_local(cmd)
   require 'English'

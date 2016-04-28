@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def opsworks_list_ips(options = {})
   response = @client.describe_instances options
   @ip_addrs = []

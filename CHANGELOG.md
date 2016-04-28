@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.12.4
+------
+* large lint for rubocop 2.3 syntax
+
 0.12.3
 ------
 * cull backups

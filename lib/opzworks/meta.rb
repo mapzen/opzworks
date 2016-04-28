@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 module OpzWorks
-  VERSION     = '0.12.3'.freeze
+  VERSION     = '0.12.4'
   AUTHORS     = ['Grant Heffernan', 'Mapzen'].freeze
   EMAIL       = ['grant@mapzen.com'].freeze
-  DESCRIPTION = 'OpzWorks Utilities'.freeze
-  SUMMARY     = 'Command line interface for Amazon OpsWorks'.freeze
+  DESCRIPTION = 'OpzWorks Utilities'
+  SUMMARY     = 'Command line interface for Amazon OpsWorks'
 end

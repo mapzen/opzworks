@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 root = File.expand_path('..', __FILE__)
 lib = File.expand_path('lib', root)

@@ -4,8 +4,8 @@ require 'aws-sdk'
 require 'trollop'
 require 'opzworks'
 
-SSH_PREFIX  = '# --- OpzWorks ---'.freeze
-SSH_POSTFIX = '# --- End of OpzWorks ---'.freeze
+SSH_PREFIX  = '# --- OpzWorks ---'
+SSH_POSTFIX = '# --- End of OpzWorks ---'
 
 module OpzWorks
   class Commands

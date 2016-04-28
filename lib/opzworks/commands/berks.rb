@@ -137,6 +137,42 @@ module OpzWorks
             end
           end
 
+          begin
+            cull = s3_client.list_objects(
+              bucket: s3_bucket,
+              prefix: "#{@s3_path}/#{cookbook_tarball}-"
+            )
+          rescue Aws::S3::Errors::ServiceError => e
+            puts "Caught exception trying to list backups in #{s3_bucket}:".foreground(:red)
+            puts "\t#{e}"
+          else
+            backup_arr = []
+            cull.contents.each { |k,v| backup_arr << k.key }
+            backup_arr.pop(5) # keep last 5 backups
+
+            if backup_arr.length != 0
+              delete_arr = []
+              while backup_arr.length > 0 
+                puts "Adding backup #{backup_arr[0]} to the cull list".foreground(:green)
+                delete_arr << backup_arr.pop
+
+                arr_of_hash = []
+                delete_arr.each { |i| arr_of_hash << { 'key': i } }
+
+                puts 'Culling old backups'.foreground(:green)
+                begin
+                  s3_client.delete_objects(
+                    bucket: s3_bucket,
+                    delete: { objects: arr_of_hash }
+                  )
+                rescue Aws::S3::Errors::ServiceError => e
+                  puts "Caught exception trying to delete backups in #{s3_bucket}:".foreground(:red)
+                  puts "\t#{e}"
+                end
+              end
+            end
+          end
+
           # upload
           puts "\nUploading to S3".foreground(:blue)
           begin

@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.12.3
+------
+* cull backups
+
 0.12.2
 ------
 * bug fix

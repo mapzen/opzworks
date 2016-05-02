@@ -13,20 +13,33 @@ See the [wiki](https://github.com/mapzen/opzworks/wiki) for more detailed inform
 
 ## Third party requirements:
 
-Aside from a recent version of ruby:
-
-* git
+* Ruby 2.3 or greater
+* Git
 * [ChefDK](https://downloads.chef.io/chef-dk/)
 
 ## Installation
 
 Install for use on the command line (requires ruby and rubygems): `gem install opzworks`
 
+If you don't want to install opzworks globally you can run `gem install --user-install opzworks`. On a Mac this will install things in `${HOME}/.gem/ruby/2.3.0/bin` and you will need to invoke opzworks explicitly or update your `${PATH}` environment variable.
+
 Then run `opzworks --help`
 
 To use the gem in a project, add `gem 'opzworks'` to your Gemfile, and then execute: `bundle`
 
 To build locally from this repository: `rake install`
+
+## Config files
+
+You will also need to ensure that you have the following config files:
+
+### AWS
+
+opzworks expects to be able to find a file at `${HOME}/.aws/config`.
+
+### Opsworks
+
+opzworks expects to be able to find a file at `${HOME}/.opzworks/config`.
 
 ## Commands
 

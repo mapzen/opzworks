@@ -35,11 +35,35 @@ You will also need to ensure that you have the following config files:
 
 ### AWS
 
-opzworks expects to be able to find a file at `${HOME}/.aws/config`.
+opzworks expects to be able to find a file at `${HOME}/.aws/credentials`. This is a standard `ini` style config file that looks like this (adjusted to your specifics):
+
+```
+[default]
+aws_access_key_id     = YOUR-AWS-KEY
+aws_secret_access_key = YOUR-AWS-SECRET
+region                = us-east-1
+output                = json
+```
+
+If that lokos kind of like [the AWS way of managing your (AWS) credentials](http://blogs.aws.amazon.com/security/post/Tx3D6U6WSFGOK2H/A-New-and-Standardized-Way-to-Manage-Credentials-in-the-AWS-SDKs) that's because it is.
+
+_Actually you also need to have a `${HOME}/.aws/config` file because computers, I guess, so I just symlink them:_
+
+```
+ln -s ${HOME}/.aws/credentials ${HOME}/.aws/config
+```
 
 ### Opsworks
 
-opzworks expects to be able to find a file at `${HOME}/.opzworks/config`.
+opzworks expects to be able to find a file at `${HOME}/.opzworks/config`. This is a standard `ini` style config file that looks like this (adjusted to your specifics):
+
+```
+[default]
+ssh-user-name         = USERNAME
+berks-github-org      = mapzen
+berks-s3-bucket       = mapzen-opsworks
+berks-repository-path = /PATH/TO/BERKS-Y-THINGS
+```
 
 ## Commands
 

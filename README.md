@@ -13,10 +13,12 @@ See the [wiki](https://github.com/mapzen/opzworks/wiki) for more detailed inform
 
 ## Third party requirements:
 
-Aside from a recent version of ruby:
+Ruby 2.3+, and...
 
 * git
 * [ChefDK](https://downloads.chef.io/chef-dk/)
+
+Again, please see the [wiki](https://github.com/mapzen/opzworks/wiki) for details!
 
 ## Installation
 

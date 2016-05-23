@@ -5,7 +5,7 @@ as other OpsWorks centric tasks such as generating ssh configs for OpsWorks inst
 
 ## Wiki
 
-See the [**wiki**](https://github.com/mapzen/opzworks/wiki) for more detailed information on getting started, walkthroughs, etc.
+**See the [wiki](https://github.com/mapzen/opzworks/wiki) for more detailed information on getting started, walkthroughs, etc.**
 
 ## Build Status
 
@@ -18,7 +18,7 @@ Ruby 2.3+, and...
 * git
 * [ChefDK](https://downloads.chef.io/chef-dk/)
 
-Again, please see the [**wiki**](https://github.com/mapzen/opzworks/wiki) for details!
+**Again, please see the [wiki](https://github.com/mapzen/opzworks/wiki) for details!**
 
 ## Installation
 

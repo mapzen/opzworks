@@ -123,7 +123,7 @@ module OpzWorks
               key: "#{@s3_path}/#{cookbook_tarball}"
             )
           rescue Aws::S3::Errors::ServiceError
-            puts "No existing #{cookbook_tarball} in #{s3_bucket} to backup, continuing...".foreground(:yellow)
+            puts "No existing #{cookbook_tarball} in #{s3_bucket}/#{@s3_path} to backup, continuing...".foreground(:yellow)
           else
             puts "Backing up existing #{cookbook_tarball} to #{@s3_path}/#{cookbook_tarball}-#{time}".foreground(:green)
             begin

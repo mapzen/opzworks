@@ -3,13 +3,14 @@
 Command line interface for managing AWS OpsWorks chef cookbooks and stack json, as well
 as other OpsWorks centric tasks such as generating ssh configs for OpsWorks instances.
 
-## Wiki
-
-**See the [wiki](https://github.com/mapzen/opzworks/wiki) for more detailed information on getting started, walkthroughs, etc.**
-
 ## Build Status
 
 [![Circle CI](https://circleci.com/gh/mapzen/opzworks.svg?style=svg)](https://circleci.com/gh/mapzen/opzworks)
+
+
+## Wiki
+
+**See the [wiki](https://github.com/mapzen/opzworks/wiki) for more detailed information on getting started, walkthroughs, etc.**
 
 ## Third party requirements:
 

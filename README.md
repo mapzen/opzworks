@@ -18,7 +18,7 @@ Ruby 2.3+, and...
 * git
 * [ChefDK](https://downloads.chef.io/chef-dk/)
 
-**Again, please see the [wiki](https://github.com/mapzen/opzworks/wiki)** for details!**
+**Again, please see the [wiki](https://github.com/mapzen/opzworks/wiki) for details!**
 
 ## Installation
 

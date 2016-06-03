@@ -46,13 +46,42 @@ systems via private IP and assumes port 9200 is open and available.
 
 This is a very rough implementation!
 
+Usage: `opzworks elastic [stack1] [stack2] ... [options]`
+
+Options:
+* `-s, --start`               Start Elastic
+* `-t, --stop`                Stop Elastic
+* `-b, --bounce`              Bounce (stop/start) Elastic
+* `-r, --rolling`             Perform a rolling restart of Elastic
+* `-o, --old-service-name`    Use 'elasticsearch' as the service name, otherwise use the layer shortname
+* `-h, --help`                Show this message
+
 #### json
 
 Update stack custom JSON.
 
+Usage: `opzworks json [stack1] [stack2] ... [options]`
+
+Options:
+* `-q, --quiet`          Update the stack json without confirmation
+* `-o, --context=<i>`    Change the number lines of diff context to show (default: 5)
+* `-c, --clone`          Just clone the management repo then exit
+* `-h, --help`           Show this message
+
+
 #### berks
 
 Build the berkshelf for a stack, or only upload the Berksfile to allow remote berkshelf management on the host, upload the tarball to S3, trigger `update_custom_cookbooks` on the stack.
+
+Usage: `opzworks berks [stack1] [stack2] ... [options]`
+
+Options:
+* `--ucc, --no-ucc`         Trigger update_custom_cookbooks on stack after uploading a new cookbook
+                          tarball. (Default: true)
+* `-u, --update`            Run berks update before packaging the Berkshelf.
+* `-c, --cookbooks=<s+>`    Run berks update only for the specified cookbooks (requires -u)
+* `-l, --clone`             Only clone the management repo, then exit.
+* `-h, --help`              Show this message
 
 ## Contributing
 

@@ -16,7 +16,7 @@ module OpzWorks
           Commands
             ssh  #{OpzWorks::Commands::SSH.banner}
             cmd  #{OpzWorks::Commands::CMD.banner}
-            json #{OpzWorks::Commands::JSON.banner}
+            json #{OpzWorks::Commands::STACKJSON.banner}
             berks #{OpzWorks::Commands::BERKS.banner}
             elastic #{OpzWorks::Commands::ELASTIC.banner}
 
@@ -33,7 +33,7 @@ module OpzWorks
       when 'ssh'
         OpzWorks::Commands::SSH.run
       when 'json'
-        OpzWorks::Commands::JSON.run
+        OpzWorks::Commands::STACKJSON.run
       when 'berks'
         OpzWorks::Commands::BERKS.run
       when 'elastic'

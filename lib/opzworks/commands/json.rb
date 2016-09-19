@@ -12,7 +12,7 @@ require_relative 'include/manage_berks_repos'
 
 module OpzWorks
   class Commands
-    class JSON
+    class STACKJSON
       def self.banner
         'Update stack json'
       end
@@ -20,7 +20,7 @@ module OpzWorks
       def self.run
         options = Trollop.options do
           banner <<-EOS.unindent
-            #{JSON.banner}
+            #{STACKJSON.banner}
 
               opzworks json stack1 stack2 ...
 
@@ -62,6 +62,16 @@ module OpzWorks
           next if options[:clone] == true
 
           json = File.read("#{@target_path}/stack.json")
+          print "\nValidating json before continuing... ".foreground(:blue)
+          begin
+            JSON.load(json)
+            print 'PASSED!'.foreground(:green)
+          rescue JSON::ParserError => e
+            print 'FAILED!'.foreground(:red)
+            puts "\n" + e.to_s.lines.first
+            abort
+          end
+
           diff = Diffy::Diff.new(@stack_json + "\n", json, context: options[:context])
           diff_str = diff.to_s(:color).chomp
 

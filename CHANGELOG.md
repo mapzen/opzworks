@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.12.6
+------
+* validate stack json before commit
+
 0.12.4
 ------
 * large lint for rubocop 2.3 syntax

@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'trollop', '~> 2.0'
   spec.add_dependency 'inifile', '~> 3.0.0'
   spec.add_dependency 'diffy',   '~> 3.1.0'
-  spec.add_dependency 'rainbow', '~> 2.0.0'
+  spec.add_dependency 'rainbow', '~> 2.2.1'
   spec.add_dependency 'faraday', '~> 0.9.2'
   spec.add_dependency 'net-ssh', '~> 3.0.2'
   spec.add_dependency 'net-ssh-multi', '~> 1.2.1'

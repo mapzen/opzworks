@@ -1,6 +1,10 @@
 changelog
 =========
 
+0.12.8
+------
+* bump aws-sdk dependency to latest
+
 0.12.7
 ------
 * bundle update (rainbow bump to 2.2.1 to remove deprecation warning in ruby 2.4)

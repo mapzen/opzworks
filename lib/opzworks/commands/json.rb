@@ -17,22 +17,8 @@ module OpzWorks
         'Update stack json'
       end
 
-      def self.run
-        options = Trollop.options do
-          banner <<-EOS.unindent
-            #{STACKJSON.banner}
+      def self.run options
 
-              opzworks json stack1 stack2 ...
-
-            The stack name can be passed as any unique regex. If there is
-            more than one match, it will simply be skipped.
-
-            Options:
-          EOS
-          opt :quiet, 'Update the stack json without confirmation', short: 'q', default: false
-          opt :context, 'Change the number lines of diff context to show', default: 5
-          opt :clone, 'Just clone the management repo then exit', short: 'c', default: false
-        end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
         config   = OpzWorks.config

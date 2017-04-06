@@ -17,24 +17,8 @@ module OpzWorks
         'Perform operations on an Elastic cluster'
       end
 
-      def self.run
-        options = Trollop.options do
-          banner <<-EOS.unindent
-            #{ELASTIC.banner}
+      def self.run options
 
-              opzworks elastic stack1 stack2 ... [--start|--stop|--bounce|--rolling]
-
-            The stack name can be passed as any unique regex. If there is
-            more than one match, it will simply be skipped.
-
-            Options:
-          EOS
-          opt :start, 'Start Elastic', default: false
-          opt :stop, 'Stop Elastic', default: false
-          opt :bounce, 'Bounce (stop/start) Elastic', default: false
-          opt :rolling, 'Perform a rolling restart of Elastic', default: false
-          opt :old_service_name, "Use 'elasticsearch' as the service name, otherwise use the layer shortname", default: false
-        end
         ARGV.empty? ? Trollop.die('no stacks specified') : false
 
         optarr = []

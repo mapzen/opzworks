@@ -14,25 +14,7 @@ module OpzWorks
         'Generate and update SSH configuration files'
       end
 
-      def self.run
-        options = Trollop.options do
-          banner <<-EOS.unindent
-            #{SSH.banner}
-
-              opzworks ssh {stack1} {stack2} {...}
-
-            The stack name can be passed as any unique regex. If no
-            arguments are passed, the command will iterate over all stacks.
-
-            Options:
-          EOS
-          opt :update, 'Update ~/.ssh/config directly'
-          opt :backup, 'Backup old SSH config before updating'
-          opt :quiet, 'Use SSH LogLevel quiet', default: true
-          opt :private, 'Return private IPs, rather than the default of public', default: false
-          opt :raw, 'Return only raw IPs rather than .ssh/config format output', default: false
-        end
-
+      def self.run options
         config = OpzWorks.config
         client = Aws::OpsWorks::Client.new(region: config.aws_region, profile: config.aws_profile)
 

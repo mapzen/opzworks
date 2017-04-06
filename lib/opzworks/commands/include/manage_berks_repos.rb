@@ -1,27 +1,49 @@
 # frozen_string_literal: true
 
-def manage_berks_repos
-  config = OpzWorks.config
-  @target_path = File.expand_path(config.berks_repository_path + "/opsworks-#{@project}", File.dirname(__FILE__))
+def manage_berks_repos config
+  @target_path = File.expand_path(config.berks_path, File.dirname(__FILE__))
 
   if !File.directory?(@target_path)
-    if config.berks_github_org.nil?
-      puts "#{@target_path} does not exist, and 'berks-github-org' is not set in ~/.aws/config, skipping.".foreground(:yellow)
-      return false
-    else
-      repo = "git@github.com:#{config.berks_github_org}/opsworks-#{@project}.git"
-      puts "#{@target_path} does not exist!".foreground(:red)
-      puts 'Attempting git clone of '.foreground(:blue) + repo.foreground(:green)
-      run_local <<-BASH
-        cd #{config.berks_repository_path}
-        git clone #{repo}
-      BASH
+    protocol = 'git@'
+    if !config.berks_repository_protocol.nil?
+      case config.berks_repository_protocol
+      when 'ssh'
+        protocol = 'ssh://'
+      when 'https'
+        protocol = 'https://'
+      else
+        puts 'Repository protocol ' + config.berks_repository_protocol + ' not supported'.foreground(:red)
+      end
     end
+
+    if config.berks_repository_path.nil?
+      puts 'Please specify the berks-repository-path'.foreground(:red)
+    end
+
+    if !config.berks_repository_user.nil?
+      repo = protocol + config.berks_repository_user + '@' + config.berks_repository_path
+    else
+      repo = protocol + config.berks_repository_path
+    end
+
+    puts "#{@target_path} does not exist!".foreground(:red)
+    puts "Attempting to create..."
+    run_local <<-BASH
+      mkdir #{@target_path}
+    BASH
+
+    puts 'Attempting git clone of '.foreground(:blue) + repo.foreground(:green)
+    run_local <<-BASH
+      cd #{config.berks_base_path}
+      git clone #{repo}
+      git checkout #{@branch}
+    BASH
   else
-    puts "Git pull from #{@target_path}, branch: ".foreground(:blue) + @branch.foreground(:green)
+    puts "Changing to #{@target_path}"
+    puts "Git pull from #{repo}, branch: ".foreground(:blue) + config.environment.foreground(:green)
     run_local <<-BASH
       cd #{@target_path}
-      git checkout #{@branch} && git pull origin #{@branch}
+      git checkout #{config.environment} && git pull origin #{config.environment}
     BASH
   end
 end

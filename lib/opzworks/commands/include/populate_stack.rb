@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-def populate_stack(input, data = {})
+def populate_stack(current_stack, aws_response = {})
   # loops over inputs
-  match = {}
+  stack = {}
   count = 0
 
-  data[:stacks].each do |stack|
-    next unless stack[:name].chomp =~ /#{input}/
+  aws_response[:stacks].each do |st|
+    next unless st[:name].chomp =~ /#{current_stack}/
     count = count += 1
-    match = stack.to_hash
+    stack = st.to_hash
   end
 
   # break?
@@ -19,16 +19,14 @@ def populate_stack(input, data = {})
     puts 'Found more than one stack matching input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
     return false
   else
-    @stack_json     = match[:custom_json] || ''
-    @project        = match[:name].split('::').first
-    @s3_path        = match[:name].gsub('::', '-')
-    @branch         = (match[:name].split('::')[1] + '-' + match[:name].split('::')[2]).gsub('::', '-')
-    @stack_id       = match[:stack_id]
-    @arn            = match[:arn]
-    @region         = match[:region]
-    @default_subnet = match[:default_subnet_id]
-    @default_os     = match[:default_os]
-    @chef_version   = match[:configuration_manager][:version]
-    @s3_source_url  = match[:custom_cookbooks_source][:url] || ''
+    @stack_json     = stack[:custom_json] || ''
+    @s3_path        = stack[:name]
+    @stack_id       = stack[:stack_id]
+    @arn            = stack[:arn]
+    @region         = stack[:region]
+    @default_subnet = stack[:default_subnet_id]
+    @default_os     = stack[:default_os]
+    @chef_version   = stack[:configuration_manager][:version]
+    @s3_source_url  = stack[:custom_cookbooks_source][:url] || ''
   end
 end

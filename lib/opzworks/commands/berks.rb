@@ -16,61 +16,59 @@ module OpzWorks
         'Build the stack berkshelf'
       end
 
-      def self.run
-        options = Trollop.options do
-          banner <<-EOS.unindent
-            #{BERKS.banner}
+      def self.run config, command_options
 
-              opzworks berks stack1 stack2 ...
-
-            The stack name can be passed as any unique regex. If there is
-            more than one match, it will simply be skipped.
-
-            Options:
-          EOS
-          opt :ucc, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: true
-          opt :update, 'Run berks update before packaging the Berkshelf.', default: false, short: 'u'
-          opt :cookbooks, 'Run berks update only for the specified cookbooks (requires -u)', type: :strings, default: nil, short: 'c'
-          opt :clone, 'Only clone the management repo, then exit.', default: false
+        if ARGV.empty?
+          puts 'no stacks specified'
+          return
         end
-        ARGV.empty? ? Trollop.die('no stacks specified') : false
 
-        config = OpzWorks.config
+        if config.aws_credentials_path
+          aws_credentials_provider = Aws::Credentials.new(config.aws_access_key, config.aws_secret_access_key)
+          opsworks = Aws::OpsWorks::Client.new(region: config.aws_region, credentials: aws_credentials_provider)
+        else
+          aws_credentials_provider = Aws::SharedCredentials.new(profile_name: config.aws_profile)
+          opsworks = Aws::OpsWorks::Client.new(region: config.aws_region, profile: config.aws_profile)
+        end
 
-        aws_credentials_provider = Aws::SharedCredentials.new(profile_name: config.aws_profile)
         s3 = Aws::S3::Resource.new(region: config.aws_region, credentials: aws_credentials_provider)
         s3_client = Aws::S3::Client.new(region: config.aws_region, credentials: aws_credentials_provider)
 
-        opsworks = Aws::OpsWorks::Client.new(region: config.aws_region, profile: config.aws_profile)
         response = opsworks.describe_stacks
 
         # loops over inputs
-        ARGV.each do |opt|
-          var = populate_stack(opt, response)
+        ARGV.each do |stack|
+
+          var = populate_stack(stack, response)
           next if var == false
 
           hash = {
-            'PROJECT:'      => @project,
             'CHEF VERSION:' => @chef_version,
             'STACK ID:'     => @stack_id,
             'S3 PATH:'      => @s3_path,
             'S3 URL:'       => @s3_source_url,
-            'BRANCH:'       => @branch
+            'BRANCH:'       => config.environment
           }
+
           puts "\n"
           puts '-------------------------------'
           hash.each { |k, v| printf("%-25s %-25s\n", k.foreground(:green), v.foreground(:red)) }
           puts '-------------------------------'
 
           puts "\n"
-          var = manage_berks_repos
+          var = manage_berks_repos(config)
           next if var == false
-          next if options[:clone] == true
+          next if command_options[:clone] == true
 
           time             = Time.new.utc.strftime('%FT%TZ')
-          berks_cook_path  = config.berks_base_path || '/tmp'
-          cook_path        = "#{berks_cook_path}/#{@project}-#{@branch}"
-          cookbook_tarball = config.berks_tarball_name || 'cookbooks.tgz'
+          berks_cook_path  = config.berks_path || '/tmp'
+          cook_path        = "#{berks_cook_path}/tmp-#{config.environment}"
+          if !config.berks_tarball_base_name.nil?
+            cookbook_tarball = config.berks_tarball_base_name + '.tgz'
+          else
+            cookbook_tarball = 'cookbooks.tgz'
+          end
+
           cookbook_upload  = cook_path + '/' "#{cookbook_tarball}"
           s3_bucket        = config.berks_s3_bucket || 'opzworks'
 
@@ -87,18 +85,18 @@ module OpzWorks
             BASH
           end
 
-          if options[:update] == true
-            if options[:cookbooks].nil?
+          if command_options[:update] == true
+            if command_options[:cookbooks].nil?
               puts "\nUpdating the berkshelf".foreground(:blue)
               run_local <<-BASH
                 cd #{@target_path}
                 berks update
               BASH
             else
-              puts "\nUpdating the berkshelf for cookbook(s): ".foreground(:blue) + options[:cookbooks].join(', ').to_s.foreground(:green)
+              puts "\nUpdating the berkshelf for cookbook(s): ".foreground(:blue) + command_options[:cookbooks].join(', ').to_s.foreground(:green)
               run_local <<-BASH
                 cd #{@target_path}
-                berks update #{options[:cookbooks].join(' ')}
+                berks update #{command_options[:cookbooks].join(' ')}
               BASH
             end
           else
@@ -199,7 +197,7 @@ module OpzWorks
 
           # update remote cookbooks
           #
-          if options[:ucc] == true
+          if command_options[:ucc] == true
             puts "\nTriggering update_custom_cookbooks for remote stack (#{@stack_id})".foreground(:blue)
 
             hash = {}

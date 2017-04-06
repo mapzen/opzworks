@@ -1,0 +1,11 @@
+# Store this file in ~/.opzworks/config
+[default]
+aws-credentials-path = get-credentials-from-this-application-yml
+aws-credentials-from-env = development
+ssh-user-name         = username
+berks-repository-user = username
+berks-repository-protocol = ssh
+berks-repository-path = path-to-git-repository
+berks-s3-bucket       = name-of-the-target-s3-bucket
+berks-tarball-base-name = chef_cookbooks
+berks-path = where-the-berksfile-is-located

@@ -1,0 +1,4 @@
+# Store this file in ~/.aws/config
+[default]
+region                = eu-west-1
+output                = json

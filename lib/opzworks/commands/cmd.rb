@@ -12,18 +12,7 @@ module OpzWorks
         'Run various OpsWorks commands'
       end
 
-      def self.run
-        options = Trollop.options do
-          banner <<-EOS.unindent
-            #{CMD.banner}
-
-              opzworks cmd [--list-stacks]
-
-            Options:
-          EOS
-          opt :'list-stacks', 'List all our stacks', default: false
-        end
-
+      def self.run options
         config = OpzWorks.config
         client = Aws::OpsWorks::Client.new(region: config.aws_region, profile: config.aws_profile)
 

@@ -110,6 +110,7 @@ module OpzWorks
           BASH
 
           puts "\nCommitting changes and pushing".foreground(:blue)
+          puts "\n"
           system "cd #{@target_path} && git commit -am 'berks update'; git push origin #{@branch}"
 
           # backup previous if it exists

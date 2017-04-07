@@ -36,7 +36,7 @@ def manage_berks_repos config
     run_local <<-BASH
       cd #{config.berks_base_path}
       git clone #{repo}
-      git checkout #{@branch}
+      git checkout #{config.environment}
     BASH
   else
     puts "Changing to #{@target_path}"

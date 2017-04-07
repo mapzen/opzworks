@@ -1,4 +1,7 @@
 # Store this file in ~/.aws/config
 [default]
+# Uncommend these lines if you are not using the application path in opzworks/conf
+# aws_access_key_id     = ilmiochiaveID
+# aws_secret_access_key = ilmiochiavesegreto
 region                = eu-west-1
 output                = json

@@ -213,9 +213,32 @@ module OpzWorks
               puts "\t#{e}"
             else
               puts 'Done!'.foreground(:green)
+              puts "\n"
             end
           else
-            puts 'Update custom cookbooks skipped via --no-ucc switch.'.foreground(:blue)
+            # puts 'Update custom cookbooks skipped via --no-ucc switch.'.foreground(:blue)
+          end
+
+          # update remote cookbooks
+          #
+          if command_options[:setup] == true
+            puts "\nTriggering setup for remote stack (#{@stack_id})".foreground(:blue)
+
+            hash = {}
+            hash[:comment]  = 'shake and bake and now cut the cake'
+            hash[:stack_id] = @stack_id
+            hash[:command]  = { name: 'setup' }
+
+            begin
+              opsworks.create_deployment(hash)
+            rescue Aws::OpsWorks::Errors::ServiceError => e
+              puts 'Caught error while attempting to trigger deployment: '.foreground(:red)
+              puts "\t#{e}"
+            else
+              puts 'Done!'.foreground(:green)
+            end
+          else
+            # puts 'Update custom cookbooks skipped via --no-ucc switch.'.foreground(:blue)
           end
         end
       end

@@ -1,6 +1,6 @@
 # Store this file in ~/.opzworks/config
 [default]
-# Commend this line if you are usin credentials in aws/config
+# Comment this line if you are usin credentials in aws/config
 aws-credentials-path = get-credentials-from-this-application-yml
 aws-credentials-from-env = development
 ssh-user-name         = username

@@ -111,7 +111,17 @@ module OpzWorks
 
           puts "\nCommitting changes and pushing".foreground(:blue)
           puts "\n"
-          system "cd #{@target_path} && git commit -am 'berks update'; git push origin #{@branch}"
+          puts "\nPlease provide a commit message".foreground(:blue)
+
+          commit_message = STDIN.gets.chomp
+          if commit_message.blank?
+            puts "\nThat was not very kind of you. Committing with 'berks update' as commit message.".foreground(:red)
+            commit_message = 'berks update'
+          else
+            puts "\nThat was very kind of you. Committing with #{commit_message} as commit message.".foreground(:green)
+          end
+
+          system "cd #{@target_path} && git commit -am '#{commit_message}'; git push origin #{@branch}"
 
           # backup previous if it exists
           #

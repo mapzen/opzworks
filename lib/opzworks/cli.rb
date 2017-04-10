@@ -52,10 +52,10 @@ module OpzWorks
 
           Options:
         EOS
-        opt :ucc, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: false
+        opt :ucc, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: false, short: 'c'
         opt :setup, 'Trigger setup on stack after uploading a new cookbook tarball.', default: false, short: 's'
         opt :update, 'Run berks update before packaging the Berkshelf.', default: false, short: 'u'
-        opt :cookbooks, 'Run berks update only for the specified cookbooks (requires -u)', type: :strings, default: nil, short: 'c'
+        opt :cookbooks, 'Run berks update only for the specified cookbooks (requires -u)', type: :strings, default: nil, short: 'p'
         opt :clone, 'Only clone the management repo, then exit.', default: false
       end
 

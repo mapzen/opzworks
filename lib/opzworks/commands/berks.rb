@@ -8,6 +8,7 @@ require 'rainbow/ext/string'
 require_relative 'include/run_local'
 require_relative 'include/populate_stack'
 require_relative 'include/manage_berks_repos'
+require_relative 'include/wait_for_deployment'
 
 module OpzWorks
   class Commands
@@ -110,15 +111,14 @@ module OpzWorks
           BASH
 
           puts "\nCommitting changes and pushing".foreground(:blue)
-          puts "\n"
-          puts "\nPlease provide a commit message".foreground(:blue)
+          puts "Please provide a commit message".foreground(:yellow)
 
           commit_message = STDIN.gets.chomp
-          if commit_message.blank?
+          if commit_message == ''
             puts "\nThat was not very kind of you. Committing with 'berks update' as commit message.".foreground(:red)
             commit_message = 'berks update'
           else
-            puts "\nThat was very kind of you. Committing with #{commit_message} as commit message.".foreground(:green)
+            puts "\nThat was very kind of you. Committing with '#{commit_message}' as commit message.".foreground(:green)
           end
 
           system "cd #{@target_path} && git commit -am '#{commit_message}'; git push origin #{@branch}"
@@ -217,7 +217,8 @@ module OpzWorks
             hash[:command]  = { name: 'update_custom_cookbooks' }
 
             begin
-              opsworks.create_deployment(hash)
+              resp = opsworks.create_deployment(hash)
+              deployment_id = resp.deployment_id
             rescue Aws::OpsWorks::Errors::ServiceError => e
               puts 'Caught error while attempting to trigger deployment: '.foreground(:red)
               puts "\t#{e}"
@@ -232,15 +233,27 @@ module OpzWorks
           # update remote cookbooks
           #
           if command_options[:setup] == true
-            puts "\nTriggering setup for remote stack (#{@stack_id})".foreground(:blue)
-
             hash = {}
             hash[:comment]  = 'shake and bake and now cut the cake'
             hash[:stack_id] = @stack_id
             hash[:command]  = { name: 'setup' }
 
             begin
-              opsworks.create_deployment(hash)
+              if deployment_id.nil? || !command_options[:ucc]
+                puts "\nTriggering setup for remote stack (#{@stack_id})".foreground(:blue)
+                opsworks.create_deployment(hash)
+              else
+                # Wait for deployment to finish successfully
+                action = wait_for_deployment(opsworks, deployment_id)
+                if action[:success]
+                  puts "\nRecipes updated successfully".foreground(:green)
+                  puts "\nTriggering setup for remote stack (#{@stack_id})".foreground(:blue)
+                  opsworks.create_deployment(hash)
+                else
+                  puts "Could not update recipes".foreground(:red)
+                  puts "Sad details: " + action[:deployment].to_s
+                end
+              end
             rescue Aws::OpsWorks::Errors::ServiceError => e
               puts 'Caught error while attempting to trigger deployment: '.foreground(:red)
               puts "\t#{e}"

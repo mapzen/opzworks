@@ -72,6 +72,7 @@ GEM
     buff-ruby_engine (1.0.0)
     buff-shell_out (1.1.0)
       buff-ruby_engine (~> 1.0)
+    byebug (8.2.1)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     celluloid-io (0.16.2)
@@ -169,6 +170,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   bundler (~> 1.11)
+  byebug
   opzworks!
   rake
   rubocop (~> 0.37.0)

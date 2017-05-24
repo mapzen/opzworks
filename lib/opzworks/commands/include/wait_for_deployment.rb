@@ -6,7 +6,7 @@ def wait_for_deployment opsworks, id, max_minutes = 10
   loop do
     break if poison
     deployment = check_deployment(opsworks,id)
-    puts "Current status: " + deployment.status.foreground(:yellow)
+    puts "Current status for deployment #{id}: " + deployment.status.foreground(:yellow)
     if deployment.status == "successful"
       poison = true
       return {success: true, deployment: deployment}

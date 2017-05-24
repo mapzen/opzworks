@@ -9,6 +9,7 @@ require_relative 'include/run_local'
 require_relative 'include/populate_stack'
 require_relative 'include/manage_berks_repos'
 require_relative 'include/wait_for_deployment'
+require_relative 'include/rolling_deployment'
 
 module OpzWorks
   class Commands
@@ -237,22 +238,37 @@ module OpzWorks
             hash[:comment]  = 'shake and bake and now cut the cake'
             hash[:stack_id] = @stack_id
             hash[:command]  = { name: 'setup' }
-
             begin
               if deployment_id.nil? || !command_options[:ucc]
                 puts "\nTriggering setup for remote stack (#{@stack_id})".foreground(:blue)
-                opsworks.create_deployment(hash)
               else
                 # Wait for deployment to finish successfully
                 action = wait_for_deployment(opsworks, deployment_id)
-                if action[:success]
-                  puts "\nRecipes updated successfully".foreground(:green)
-                  puts "\nTriggering setup for remote stack (#{@stack_id})".foreground(:blue)
-                  opsworks.create_deployment(hash)
+              end
+              if defined? action || action[:success]
+                puts "\nRecipes updated successfully".foreground(:green)
+                puts "\nTriggering setup for remote stack (#{@stack_id})".foreground(:blue)
+
+                if command_options[:rolling] == true
+                  puts "\n using rolling deployment".foreground(:blue)
+                  rolling_deployment(opsworks, hash)
                 else
-                  puts "Could not update recipes".foreground(:red)
-                  puts "Sad details: " + action[:deployment].to_s
+                  puts "\n all at once".foreground(:red)
+                  puts "\n Are you sure (y) or did you mean to do a rollind deployment (r)?".foreground(:red)
+                  are_you_sure = STDIN.gets.chomp
+                  if are_you_sure == 'y'
+                    puts "\n Shrink tried to interfer. Patient died.".foreground(:green)
+                    opsworks.create_deployment(hash)
+                  elsif are_you_sure == 'r'
+                    puts "\n Shrink interfered. Patient cured.".foreground(:green)
+                    rolling_deployment(opsworks, hash)
+                  else
+                    puts "\n Shrink interfered. Patient cured. Therapy ended.".foreground(:green)
+                  end
                 end
+              else
+                puts "Could not run setup recipes".foreground(:red)
+                puts "Sad details: " + action[:deployment].to_s
               end
             rescue Aws::OpsWorks::Errors::ServiceError => e
               puts 'Caught error while attempting to trigger deployment: '.foreground(:red)

@@ -5,20 +5,21 @@ require 'rainbow'
 require 'yaml'
 
 module OpzWorks
-  def self.config environment, berks_path, aws_region = nil
-    @config ||= Config.new environment, berks_path, aws_region
+  def self.config branch, is_local_branch, berks_path, aws_region = nil
+    @config ||= Config.new branch, is_local_branch, berks_path, aws_region
   end
 
   class Config
-    attr_reader :environment, :ssh_user_name, :berks_repository_user, :berks_repository_path,
+    attr_reader :branch, :is_local_branch, :ssh_user_name, :berks_repository_user, :berks_repository_path,
                 :berks_path, :berks_s3_bucket, :berks_tarball_base_name, :berks_github_org,
                 :aws_region, :aws_profile, :aws_credentials_path, :aws_access_key, :aws_secret_access_key
 
-    def initialize environment, berks_path, aws_region
+    def initialize branch, is_local_branch, berks_path, aws_region
       aws_config_file = ENV['AWS_CONFIG_FILE'] || "#{ENV['HOME']}/.aws/config"
       opzworks_config_file = ENV['OPZWORKS_CONFIG_FILE'] || "#{ENV['HOME']}/.opzworks/config"
 
-      @environment = environment
+      @branch = branch
+      @is_local_branch = is_local_branch
 
       # abort unless required conditions are met
       abort "AWS config file #{aws_config_file} not found, exiting!".foreground(:red) unless File.exist? aws_config_file

@@ -14,12 +14,13 @@ module OpzWorks
           #{OpzWorks::SUMMARY}
 
           Options
-            -e Environment, must correlate to the branch name in the repository where the berkshelf is located
+            -b remote ' of the chef repository
+            -l local branch of the chef repository. Can be used in combination with gerrit reviews
             -r The region of your cloud provider you want to use (currently only AWS is supported)
             -p The path to the berkshelf
 
-          Env
-            The environment you want to use. Must correspond to the branch name of the berks repository.
+          stack
+            The stacks you want to use. Must correspond to the branch name of the berks repository.
 
           Supported Commands
             berks #{OpzWorks::Commands::BERKS.banner}
@@ -35,7 +36,8 @@ module OpzWorks
 
           Options:
         EOS
-        opt :environment, 'Specify the environment for the stack, e.g. "staging". Required.', default: 'development', short: 'e', type: :string
+        opt :remote_branch, 'remote branch of the chef repository', default: 'development', short: 'b', type: :string
+        opt :local_branch, 'local branch of the chef repository. Can be used in combination with gerrit reviews', short: 'l', type: :string
         opt :region, 'Specify the AWS region where the stack can be found', short: 'r', type: :string
         opt :berks_path, 'Specify the path to the local berkshelf where the stack can be found', short: 'p', type: :string
       end
@@ -125,19 +127,27 @@ module OpzWorks
 
       result = Trollop::Subcommands::parse!
 
-      if !result.global_options[:environment_given]
-        puts 'No environment specified, using development!'
-        environment = 'development'
+      if !result.global_options[:remote_branch_given] && !result.global_options[:local_branch_given]
+        abort("You need to specify a branch (remote (-b) or local (-l))")
+      end
+
+      is_local_branch = false
+
+      if result.global_options[:remote_branch_given]
+        branch = result.global_options[:remote_branch]
+        puts 'Using remote branch ' + branch
       else
-        environment = result.global_options[:environment]
+        branch = result.global_options[:local_branch]
+        is_local_branch = true
+        puts 'Using local branch ' + branch
       end
 
       if !result.global_options[:region_given]
-        config = OpzWorks.config environment, result.global_options[:berks_path]
+        config = OpzWorks.config branch, is_local_branch, result.global_options[:berks_path]
         puts 'No region specified, using ' + config.aws_region + ' from system config.'
       else
         aws_region = result.global_options[:region]
-        config = OpzWorks.config environment, result.global_options[:berks_path], aws_region
+        config = OpzWorks.config branch, is_local_branch, is_local, result.global_options[:berks_path], aws_region
       end
 
       case result.subcommand

@@ -49,7 +49,7 @@ module OpzWorks
             'STACK ID:'     => @stack_id,
             'S3 PATH:'      => @s3_path,
             'S3 URL:'       => @s3_source_url,
-            'BRANCH:'       => config.environment
+            'BRANCH:'       => config.branch
           }
 
           puts "\n"
@@ -64,7 +64,7 @@ module OpzWorks
 
           time             = Time.new.utc.strftime('%FT%TZ')
           berks_cook_path  = config.berks_path || '/tmp'
-          cook_path        = "#{berks_cook_path}/tmp-#{config.environment}"
+          cook_path        = "#{berks_cook_path}/tmp-#{config.branch}"
           if !config.berks_tarball_base_name.nil?
             cookbook_tarball = config.berks_tarball_base_name + '.tgz'
           else
@@ -110,19 +110,6 @@ module OpzWorks
             cd #{@target_path}
             berks package #{cook_path}/#{cookbook_tarball}
           BASH
-
-          puts "\nCommitting changes and pushing".foreground(:blue)
-          puts "Please provide a commit message".foreground(:yellow)
-
-          commit_message = STDIN.gets.chomp
-          if commit_message == ''
-            puts "\nThat was not very kind of you. Committing with 'berks update' as commit message.".foreground(:red)
-            commit_message = 'berks update'
-          else
-            puts "\nThat was very kind of you. Committing with '#{commit_message}' as commit message.".foreground(:green)
-          end
-
-          system "cd #{@target_path} && git commit -am '#{commit_message}'; git push origin #{@branch}"
 
           # backup previous if it exists
           #

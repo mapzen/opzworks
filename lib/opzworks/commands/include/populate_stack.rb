@@ -13,10 +13,10 @@ def populate_stack(current_stack, aws_response = {})
 
   # break?
   if count < 1
-    puts 'No matching stacks found for input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
+    puts 'No matching stacks found for stack '.foreground(:yellow) + current_stack.foreground(:green) + ', skipping.'.foreground(:yellow)
     return false
   elsif count > 1
-    puts 'Found more than one stack matching input '.foreground(:yellow) + input.foreground(:green) + ', skipping.'.foreground(:yellow)
+    puts 'Found more than one stack matching stack '.foreground(:yellow) + current_stack.foreground(:green) + ', skipping.'.foreground(:yellow)
     return false
   else
     @stack_json     = stack[:custom_json] || ''

@@ -10,3 +10,4 @@ berks-repository-path = path-to-git-repository
 berks-s3-bucket       = name-of-the-target-s3-bucket
 berks-tarball-base-name = chef_cookbooks
 berks-path = where-the-berksfile-is-located
+app-path = where-to-find-the-app

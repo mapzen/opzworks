@@ -2,13 +2,14 @@
 
 def manage_berks_repos config
   @target_path = File.expand_path(config.berks_path, File.dirname(__FILE__))
+  branch = config.chef_branch
 
   if config.is_local_branch
     puts "Changing to #{@target_path}"
-    puts "Checking out branch: ".foreground(:blue) + config.branch.foreground(:green)
+    puts "Checking out branch: ".foreground(:blue) + branch.foreground(:green)
     run_local <<-BASH
       cd #{@target_path}
-      git checkout #{config.branch}
+      git checkout #{branch}
     BASH
   else
     if !File.directory?(@target_path)
@@ -45,14 +46,14 @@ def manage_berks_repos config
       run_local <<-BASH
         cd #{config.berks_base_path}
         git clone #{repo}
-        git checkout #{config.branch}
+        git checkout #{branch}
       BASH
     else
       puts "Changing to #{@target_path}"
-      puts "Git pull from #{repo}, branch: ".foreground(:blue) + config.branch.foreground(:green)
+      puts "Git pull from #{repo}, branch: ".foreground(:blue) + branch.foreground(:green)
       run_local <<-BASH
         cd #{@target_path}
-        git checkout #{config.branch} && git pull origin #{config.branch}
+        git checkout #{branch} && git pull origin #{branch}
       BASH
     end
   end

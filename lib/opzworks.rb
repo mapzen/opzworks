@@ -4,7 +4,7 @@ require 'opzworks/meta'
 require 'opzworks/config'
 
 # require our commands
-COMMANDS = %w(ssh cmd json berks elastic).each do |cmd|
+COMMANDS = %w(ssh cmd json berks deploy elastic).each do |cmd|
   require "opzworks/commands/#{cmd}"
 end
 

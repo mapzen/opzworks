@@ -3,6 +3,7 @@
 .bundle
 .config
 .yardoc
+.byebug_history
 InstalledFiles
 _yardoc
 coverage

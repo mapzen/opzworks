@@ -8,5 +8,5 @@ def run_local(cmd)
   return unless $CHILD_STATUS.exitstatus != 0
 
   puts 'exit code: ' + $CHILD_STATUS.exitstatus.to_s
-  exit
+  abort('Shell command failed, assuming you want to abort'.foreground(:red))
 end

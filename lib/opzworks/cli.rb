@@ -75,7 +75,8 @@ module OpzWorks
         opt :from_branch, 'Branch from which to get the app code ( has to exist as local branch )', short: 'f', default: 'master', type: :string
         opt :to_branch, 'Branch to which to merge the from_branch ( has to exist as local branch, "merge --no-ff" will be used per default )', short: 't', default: 'staging', type: :string
         opt :merge_method, 'Git strategy to use to merge to from_ and to_branch', short: 'm', default: 'merge --no-ff', type: :string
-        opt :deployment_script, "Relative path from app-path to script to use for deployment. Assumes it takes a git tag for the app's code as its only argument (see tag_version)", short: 'd'
+        opt :deployment_script, "Relative path from app-path to script to use for deployment. Assumes it takes a git tag for the app's code as its only argument (see tag_version)", short: 'd', type: :string
+        opt :environment, 'Environment in which to run the deployment script', short: 'e', default: 'staging', type: :string
         opt :tag_version, 'Version used as tag in git, defaults to date +%F-%H-%M-%S (i.e. 2017-08-29-18-48-06)', short: 'v', type: :string
         opt :from_branch_chef, 'Chef branch from which to deploy', short: 'b', default: 'master', type: :string
         opt :to_branch_chef, 'Chef branch to which to deploy', short: 'l', default: 'staging', type: :string
@@ -188,13 +189,7 @@ module OpzWorks
 
       if result.subcommand == 'deploy'
         pre_config = {}
-        app = {
-          from_branch: result.subcommand_options[:from_branch],
-          to_branch: result.subcommand_options[:to_branch],
-          deployment_script: result.subcommand_options[:deployment_script],
-          merge_method: result.subcommand_options[:merge_method]
-        }
-
+        app = {}
         pre_config[:app] = app
 
         if result.subcommand_options[:setup_chef]
@@ -220,9 +215,19 @@ module OpzWorks
         end
       end
 
-      unless result.subcommand_options[:auto]
-        STDERR.puts "\nAre you sure you want to proceed on stack(s) '#{ARGV.join(',')}' (y/n)".foreground(:red)
+      unless result.subcommand_options[:auto] == "true"
+        STDERR.puts "\nAre you sure you want to proceed on stack(s) '#{ARGV.join(',')}'? (y/n)".foreground(:red)
         abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
+        if result.subcommand_options[:setup_chef]
+          STDERR.puts "\nAre you sure you want to merge chef branch '#{result.subcommand_options[:from_branch_chef]}' into chef branch '#{result.subcommand_options[:to_branch_chef]}'? (y/n)".foreground(:red)
+          abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
+        end
+        STDERR.puts "\nAre you sure you want to merge the app's '#{result.subcommand_options[:from_branch_chef]}' branch into the app's '#{result.subcommand_options[:to_branch_chef]}' branch? (y/n)".foreground(:red)
+        abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
+        if result.subcommand_options[:deployment_script]
+          STDERR.puts "\nAre you sure you want to execute the deployment script '#{result.subcommand_options[:deployment_script]}'? (y/n)".foreground(:red)
+          abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
+        end
       end
 
       case result.subcommand

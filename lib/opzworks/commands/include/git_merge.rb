@@ -24,7 +24,7 @@ def git_merge(path, from_branch, to_branch, merge_method, tag_version='', enviro
     puts "Running the deployment script deployment_script: #{deployment_script} #{environment} #{tag_version}".foreground(:blue)
     run_local <<-BASH
       cd #{path}
-      BUNDLE_GEMFILE=Gemfile #{deployment_script} #{environment} #{tag_version}
+      #{deployment_script} #{environment} #{tag_version}
     BASH
   end
 

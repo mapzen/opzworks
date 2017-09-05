@@ -222,7 +222,7 @@ module OpzWorks
           STDERR.puts "\nAre you sure you want to merge chef branch '#{result.subcommand_options[:from_branch_chef]}' into chef branch '#{result.subcommand_options[:to_branch_chef]}'? (y/n)".foreground(:red)
           abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
         end
-        STDERR.puts "\nAre you sure you want to merge the app's '#{result.subcommand_options[:from_branch_chef]}' branch into the app's '#{result.subcommand_options[:to_branch_chef]}' branch? (y/n)".foreground(:red)
+        STDERR.puts "\nAre you sure you want to merge the app's '#{result.subcommand_options[:from_branch]}' branch into the app's '#{result.subcommand_options[:to_branch]}' branch? (y/n)".foreground(:red)
         abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
         if result.subcommand_options[:deployment_script]
           STDERR.puts "\nAre you sure you want to execute the deployment script '#{result.subcommand_options[:deployment_script]}'? (y/n)".foreground(:red)

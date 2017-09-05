@@ -17,7 +17,7 @@ def git_merge(path, from_branch, to_branch, merge_method, tag_version='', enviro
   run_local <<-BASH
     cd #{path}
     git checkout #{to_branch}
-    git #{merge_method} #{from_branch}"
+    git #{merge_method} #{from_branch}
   BASH
 
   unless deployment_script.nil? || !deployment_script

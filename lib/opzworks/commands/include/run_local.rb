@@ -6,9 +6,7 @@ def run_local(cmd)
 
   system cmd
   return unless $CHILD_STATUS.exitstatus != 0
-  if cmd.include?('pull') || cmd.include?('clone')
-    puts 'Did you use remote (-b) branch instead of local (-l)?'.foreground(:red)
-  end
+
   puts 'exit code: ' + $CHILD_STATUS.exitstatus.to_s
-  exit
+  abort('Shell command failed, assuming you want to abort'.foreground(:red))
 end

@@ -13,7 +13,7 @@ module OpzWorks
     attr_reader :pre_config, :ssh_user_name, :berks_repository_user, :berks_repository_path,
                 :berks_path, :berks_s3_bucket, :berks_tarball_base_name, :berks_github_org,
                 :aws_region, :aws_profile, :aws_credentials_path, :aws_access_key, :aws_secret_access_key,
-                :chef_branch, :is_local_branch, :app_path
+                :chef_branch, :is_local_branch, :app_path, :aws_app_id
 
     def initialize pre_config, aws_region
       aws_config_file = ENV['AWS_CONFIG_FILE'] || "#{ENV['HOME']}/.aws/config"
@@ -64,6 +64,8 @@ module OpzWorks
       # set the region and the profile we want to pick up from ~/.aws/credentials
       @aws_profile = ENV['AWS_PROFILE'] || 'default'
       abort "Could not find [#{@aws_profile}] config block in #{aws_config_file}, exiting!".foreground(:red) if aws_ini[@aws_profile].empty?
+
+      @aws_app_id = aws_ini[@aws_profile]['app-id'].strip unless aws_ini[@aws_profile]['app-id'].nil?
 
       if aws_region.nil?
         @aws_region = ENV['AWS_REGION'] || aws_ini[@aws_profile]['region']

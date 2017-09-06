@@ -90,14 +90,17 @@ module OpzWorks
           hash = {}
           hash[:comment]  = 'deploying the app'
           hash[:stack_id] = @stack_id
-          hash[:command]  = { name: 'deploy' }
+          hash[:app_id] = config.aws_app_id
+          hash[:command]  = {
+            name: 'deploy'
+          }
 
           if command_options[:rolling] == true
             STDERR.puts "\n\t using rolling deployment".foreground(:blue)
             rolling_deployment(opsworks, hash)
           else
             STDERR.puts "\n\t all at once".foreground(:red)
-            unless command_options[:auto]
+            unless command_options[:auto] == "true"
               STDERR.puts "\n\t\t Are you sure (y) or did you mean to do a rolling deployment (r)?".foreground(:red)
               are_you_sure = STDIN.gets.chomp
             end
@@ -108,7 +111,7 @@ module OpzWorks
               deployment_id = resp.deployment_id
               result = wait_for_deployment(opsworks, deployment_id)
               if !result[:success]
-                STDERR.puts "\tCould not deploy app on instance #{hash[:instance_id]} ".foreground(:red)
+                STDERR.puts "\tCould not deploy app! ".foreground(:red)
                 break
               end
             elsif are_you_sure == 'r'

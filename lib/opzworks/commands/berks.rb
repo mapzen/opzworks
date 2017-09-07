@@ -82,7 +82,7 @@ module OpzWorks
             BASH
           end
 
-          if command_options[:update] == true
+          if command_options[:update]
             if command_options[:cookbooks].nil?
               STDERR.puts "\nUpdating the berkshelf".foreground(:blue)
               run_local <<-BASH
@@ -200,7 +200,7 @@ module OpzWorks
             hash[:command]  = { name: 'update_custom_cookbooks' }
 
             begin
-              if command_options[:rolling] == true
+              if command_options[:rolling]
                 rolling_deployment(opsworks, hash)
               else
                 resp = opsworks.create_deployment(hash)
@@ -214,12 +214,12 @@ module OpzWorks
               STDERR.puts "\n"
             end
           else
-            # STDERR.puts 'Update custom cookbooks skipped via --no-ucc switch.'.foreground(:blue)
+            STDERR.puts 'Update custom cookbooks skipped via --no-ucc switch.'.foreground(:blue)
           end
 
           # run setup on the remove instances
           #
-          if command_options[:setup] == true
+          if command_options[:setup]
             hash = {}
             hash[:comment]  = 'running setup'
             hash[:stack_id] = @stack_id
@@ -235,7 +235,7 @@ module OpzWorks
                 STDERR.puts "\n\tRecipes updated successfully".foreground(:green)
                 STDERR.puts "\n\tTriggering setup for remote stack (#{@stack_id})".foreground(:blue)
 
-                if command_options[:rolling] == true
+                if command_options[:rolling]
                   STDERR.puts "\n\t\t using rolling deployment".foreground(:blue)
                   rolling_deployment(opsworks, hash)
                 else
@@ -272,8 +272,6 @@ module OpzWorks
             else
               STDERR.puts 'Done!'.foreground(:green)
             end
-          else
-            # STDERR.puts 'Update custom cookbooks skipped via --no-ucc switch.'.foreground(:blue)
           end
         end
       end

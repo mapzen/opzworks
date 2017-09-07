@@ -52,7 +52,7 @@ module OpzWorks
           command_options[:tag_version] = `date +%F-%H-%M-%S`.gsub(/\n/,'') if !command_options[:tag_version]
 
           # This calls opzworks berks...
-          if command_options[:setup_chef]
+          if command_options[:from_branch_chef] && command_options[:to_branch_chef]
             # This pulls and merges the from_ & to_branches with merge_method, tags the version and pushes to to_branch
             git_merge(
               config.berks_path,
@@ -61,7 +61,7 @@ module OpzWorks
               command_options[:merge_method],
               command_options[:tag_version]
             )
-            rolling = command_options[:rolling_chef] ? '-r' : ''
+            rolling = command_options[:rolling] ? '-r' : ''
             STDERR.puts 'Starting chef setup'.foreground(:blue)
             cmd = "opzworks berks -b #{command_options[:to_branch_chef]} -c -s #{rolling} -y 'true' #{stack}"
             Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
@@ -89,6 +89,8 @@ module OpzWorks
               command_options[:deployment_script]
             )
 
+            abort("Please specify an app id for environment #{command_options[:environment]} on stack #{stack}".foreground(:red)) unless config.aws_app_id
+
             hash = {}
             hash[:comment]  = 'deploying the app'
             hash[:stack_id] = @stack_id
@@ -97,12 +99,12 @@ module OpzWorks
               name: 'deploy'
             }
 
-            if command_options[:rolling] == true
+            if command_options[:rolling]
               STDERR.puts "\n\t using rolling deployment".foreground(:blue)
               rolling_deployment(opsworks, hash)
             else
               STDERR.puts "\n\t all at once".foreground(:red)
-              unless command_options[:auto] == "true"
+              unless command_options[:auto]
                 STDERR.puts "\n\t\t Are you sure (y) or did you mean to do a rolling deployment (r)?".foreground(:red)
                 are_you_sure = STDIN.gets.chomp
               end

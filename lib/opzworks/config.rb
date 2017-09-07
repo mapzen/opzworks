@@ -59,7 +59,7 @@ module OpzWorks
       abort "Could not find [#{@aws_profile}] config block in #{aws_config_file}, exiting!".foreground(:red) if aws_ini[@aws_profile].empty?
 
       if pre_config[:app]
-        @aws_app_id = aws_ini[@aws_profile]["app-id-#{pre_config[:app][:environment]}"].strip unless aws_ini[@aws_profile]['app-id'].nil?
+        @aws_app_id = aws_ini[@aws_profile]["app-id-#{pre_config[:app][:environment]}"].strip unless aws_ini[@aws_profile]["app-id-#{pre_config[:app][:environment]}"].nil?
         @app_path =
           opzworks_ini[@opzworks_profile]['app-path'].strip unless opzworks_ini[@opzworks_profile]['app-path'].nil?
       end

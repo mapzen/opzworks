@@ -65,25 +65,24 @@ module OpzWorks
         banner <<-EOS.unindent
           #{OpzWorks::Commands::DEPLOY.banner}
 
-            opzworks deploy {stack1} {stack2} {...}
+            opzworks deploy {options} {stack1} {stack2} {...}
 
           The stack name can be passed as any unique regex. If no
           arguments are passed, the command will iterate over all stacks.
 
           Options:
         EOS
-        opt :from_branch, 'Branch from which to get the app code ( has to exist as local branch )', short: 'f', default: 'master', type: :string
-        opt :to_branch, 'Branch to which to merge the from_branch ( has to exist as local branch, "merge --no-ff" will be used per default )', short: 't', default: 'staging', type: :string
+        opt :from_branch, 'Branch from which to get the app code ( has to exist as local branch )', short: 'f', type: :string
+        opt :to_branch, 'Branch to which to merge the from_branch ( has to exist as local branch, "merge --no-ff" will be used per default )', short: 't', type: :string
         opt :merge_method, 'Git strategy to use to merge to from_ and to_branch', short: 'm', default: 'merge --no-ff', type: :string
         opt :deployment_script, "Relative path from app-path to script to use for deployment. Assumes it takes a git tag for the app's code as its only argument (see tag_version)", short: 'd', type: :string
         opt :environment, 'Environment in which to run the deployment script', short: 'e', default: 'staging', type: :string
         opt :tag_version, 'Version used as tag in git, defaults to date +%F-%H-%M-%S (i.e. 2017-08-29-18-48-06)', short: 'v', type: :string
-        opt :from_branch_chef, 'Chef branch from which to deploy', short: 'b', default: 'master', type: :string
-        opt :to_branch_chef, 'Chef branch to which to deploy', short: 'l', default: 'staging', type: :string
+        opt :from_branch_chef, 'Chef branch from which to deploy', short: 'b', type: :string
+        opt :to_branch_chef, 'Chef branch to which to deploy', short: 'l', type: :string
         opt :berks_path, 'Specify the path to the local berkshelf where the stack can be found', short: 'p', type: :string
-        opt :setup_chef, 'Run chef setup after deployment', short: 's', default: false
-        opt :rolling_chef, 'Setup chef in a rolling manor (-s needed)', short: 'r', default: false
-        opt :auto, 'NOT RECOMMENDED! This will deactivate all questions, leaving you without chance to abort', short: 'y', default: 'false'
+        opt :rolling, 'Setup chef in a rolling manor (-s needed)', short: 'r', default: false
+        opt :auto, 'NOT RECOMMENDED! This will deactivate all questions, leaving you without chance to abort', short: 'y'
       end
 
       Trollop::Subcommands::register_subcommand('ssh') do
@@ -194,7 +193,7 @@ module OpzWorks
         }
         pre_config[:app] = app
 
-        if result.subcommand_options[:setup_chef]
+        if result.subcommand_options[:from_branch_chef] && result.subcommand_options[:to_branch_chef]
           chef = {}
           if !result.subcommand_options[:from_branch_chef] && !result.subcommand_options[:to_branch_chef]
             abort("You need to specify a branch from which to deploy and / or a branch to which to deploy")
@@ -217,7 +216,7 @@ module OpzWorks
         end
       end
 
-      unless result.subcommand_options[:auto] == "true"
+      unless result.subcommand_options[:auto]
         STDERR.puts "\nAre you sure you want to proceed on stack(s) '#{ARGV.join(',')}'? (y/n)".foreground(:red)
         abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
         if result.subcommand_options[:setup_chef]

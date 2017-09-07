@@ -74,54 +74,56 @@ module OpzWorks
             end
           end
 
-          # Now deploy the app itselfs
-          STDERR.puts 'Starting app deployment'.foreground(:blue)
-          # This pulls and merges the from_ & to_branches with merge_method, runs the deployment_script, tags the version and pushes to to_branch
-          git_merge(
-            config.app_path,
-            command_options[:from_branch],
-            command_options[:to_branch],
-            command_options[:merge_method],
-            command_options[:tag_version],
-            command_options[:environment],
-            command_options[:deployment_script]
-          )
+          if command_options[:to_branch] && command_options[:from_branch]
 
-          hash = {}
-          hash[:comment]  = 'deploying the app'
-          hash[:stack_id] = @stack_id
-          hash[:app_id] = config.aws_app_id
-          hash[:command]  = {
-            name: 'deploy'
-          }
+            # Now deploy the app itselfs
+            STDERR.puts 'Starting app deployment'.foreground(:blue)
+            # This pulls and merges the from_ & to_branches with merge_method, runs the deployment_script, tags the version and pushes to to_branch
+            git_merge(
+              config.app_path,
+              command_options[:from_branch],
+              command_options[:to_branch],
+              command_options[:merge_method],
+              command_options[:tag_version],
+              command_options[:environment],
+              command_options[:deployment_script]
+            )
 
-          if command_options[:rolling] == true
-            STDERR.puts "\n\t using rolling deployment".foreground(:blue)
-            rolling_deployment(opsworks, hash)
-          else
-            STDERR.puts "\n\t all at once".foreground(:red)
-            unless command_options[:auto] == "true"
-              STDERR.puts "\n\t\t Are you sure (y) or did you mean to do a rolling deployment (r)?".foreground(:red)
-              are_you_sure = STDIN.gets.chomp
-            end
+            hash = {}
+            hash[:comment]  = 'deploying the app'
+            hash[:stack_id] = @stack_id
+            hash[:app_id] = config.aws_app_id
+            hash[:command]  = {
+              name: 'deploy'
+            }
 
-            if are_you_sure.nil? || are_you_sure == 'y'
-              STDERR.puts "\n\t Shrink tried to interfer, but failed. Running on all instances at once!".foreground(:green)
-              resp = opsworks.create_deployment(hash)
-              deployment_id = resp.deployment_id
-              result = wait_for_deployment(opsworks, deployment_id)
-              if !result[:success]
-                STDERR.puts "\tCould not deploy app! ".foreground(:red)
-                break
-              end
-            elsif are_you_sure == 'r'
-              STDERR.puts "\n\t Shrink interfered. Using rolling deployment.".foreground(:green)
+            if command_options[:rolling] == true
+              STDERR.puts "\n\t using rolling deployment".foreground(:blue)
               rolling_deployment(opsworks, hash)
             else
-              STDERR.puts "\n\t Shrink interfered. Patient cured. Therapy ended.".foreground(:green)
+              STDERR.puts "\n\t all at once".foreground(:red)
+              unless command_options[:auto] == "true"
+                STDERR.puts "\n\t\t Are you sure (y) or did you mean to do a rolling deployment (r)?".foreground(:red)
+                are_you_sure = STDIN.gets.chomp
+              end
+
+              if are_you_sure.nil? || are_you_sure == 'y'
+                STDERR.puts "\n\t Shrink tried to interfer, but failed. Running on all instances at once!".foreground(:green)
+                resp = opsworks.create_deployment(hash)
+                deployment_id = resp.deployment_id
+                result = wait_for_deployment(opsworks, deployment_id)
+                if !result[:success]
+                  STDERR.puts "\tCould not deploy app! ".foreground(:red)
+                  break
+                end
+              elsif are_you_sure == 'r'
+                STDERR.puts "\n\t Shrink interfered. Using rolling deployment.".foreground(:green)
+                rolling_deployment(opsworks, hash)
+              else
+                STDERR.puts "\n\t Shrink interfered. Patient cured. Therapy ended.".foreground(:green)
+              end
             end
           end
-
         end
       end
     end

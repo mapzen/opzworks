@@ -5,4 +5,5 @@
 # aws_secret_access_key = ilmiochiavesegreto
 region                = eu-west-1
 output                = json
-app_id                = the-apps-opsworks-id
+app-id-environment1   = the-apps-opsworks-id-in-environment-1 (must correspond to -e)
+app-id-environment2   = the-apps-opsworks-id-in-environment-2 (must correspond to -e)

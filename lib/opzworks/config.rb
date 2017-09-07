@@ -55,8 +55,7 @@ module OpzWorks
         opzworks_ini[@opzworks_profile]['berks-tarball-base-name'].strip unless opzworks_ini[@opzworks_profile]['berks-tarball-base-name'].nil?
 
       if pre_config[:app]
-        @app_from_branch = pre_config[:app][:from_branch] unless pre_config[:app][:from_branch]
-        @app_to_branch = pre_config[:app][:to_branch] unless pre_config[:app][:to_branch]
+        @aws_app_id = aws_ini[@aws_profile]["app-id-#{pre_config[:app][:environment]}"].strip unless aws_ini[@aws_profile]['app-id'].nil?
         @app_path =
           opzworks_ini[@opzworks_profile]['app-path'].strip unless opzworks_ini[@opzworks_profile]['app-path'].nil?
       end
@@ -64,8 +63,6 @@ module OpzWorks
       # set the region and the profile we want to pick up from ~/.aws/credentials
       @aws_profile = ENV['AWS_PROFILE'] || 'default'
       abort "Could not find [#{@aws_profile}] config block in #{aws_config_file}, exiting!".foreground(:red) if aws_ini[@aws_profile].empty?
-
-      @aws_app_id = aws_ini[@aws_profile]['app-id'].strip unless aws_ini[@aws_profile]['app-id'].nil?
 
       if aws_region.nil?
         @aws_region = ENV['AWS_REGION'] || aws_ini[@aws_profile]['region']

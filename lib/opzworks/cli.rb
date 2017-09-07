@@ -189,7 +189,9 @@ module OpzWorks
 
       if result.subcommand == 'deploy'
         pre_config = {}
-        app = {}
+        app = {
+          environment: result.subcommand_options[:environment]
+        }
         pre_config[:app] = app
 
         if result.subcommand_options[:setup_chef]

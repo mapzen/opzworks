@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    opzworks (0.13.0.1)
+    opzworks (0.13.0.2)
       addressable (= 2.5.0)
       aws-sdk (~> 2.7.3)
       berkshelf

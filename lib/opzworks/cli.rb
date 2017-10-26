@@ -219,7 +219,7 @@ module OpzWorks
       unless result.subcommand_options[:auto]
         STDERR.puts "\nAre you sure you want to proceed on stack(s) '#{ARGV.join(',')}'? (y/n)".foreground(:red)
         abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
-        if result.subcommand_options[:setup_chef]
+        if result.subcommand_options[:from_branch_chef]
           STDERR.puts "\nAre you sure you want to merge chef branch '#{result.subcommand_options[:from_branch_chef]}' into chef branch '#{result.subcommand_options[:to_branch_chef]}'? (y/n)".foreground(:red)
           abort('Exiting before something bad happened!'.foreground(:green)) if STDIN.gets.chomp == 'n'
         end

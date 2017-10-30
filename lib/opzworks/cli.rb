@@ -54,7 +54,7 @@ module OpzWorks
         opt :berks_path, 'Specify the path to the local berkshelf where the stack can be found', short: 'p', type: :string
         opt :ucc, 'Trigger update_custom_cookbooks on stack after uploading a new cookbook tarball.', default: false, short: 'c'
         opt :setup, 'Trigger setup on stack after uploading a new cookbook tarball.', default: false, short: 's'
-        opt :rolling, 'Each action will be executed in a rolling manner, meaning instance after instance', default: false, short: 'r'
+        opt :rolling, 'Each action will be executed in a rolling manner, meaning instance after instance (-s needed)', default: false, short: 'r'
         opt :update, 'Run berks update before packaging the Berkshelf.', default: false, short: 'u'
         opt :cookbooks, 'Run berks update only for the named cookbooks (requires -u)', type: :strings, default: nil, short: 'n'
         opt :clone, 'Only clone the management repo, then exit.', default: false
@@ -81,7 +81,7 @@ module OpzWorks
         opt :from_branch_chef, 'Chef branch from which to deploy', short: 'b', type: :string
         opt :to_branch_chef, 'Chef branch to which to deploy', short: 'l', type: :string
         opt :berks_path, 'Specify the path to the local berkshelf where the stack can be found', short: 'p', type: :string
-        opt :rolling, 'Setup chef in a rolling manor (-s needed)', short: 'r', default: false
+        opt :rolling, 'Each action will be executed in a rolling manner, meaning instance after instance (-s needed)', short: 'r', default: false
         opt :auto, 'NOT RECOMMENDED! This will deactivate all questions, leaving you without chance to abort', short: 'y'
       end
 

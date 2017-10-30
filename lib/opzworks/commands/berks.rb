@@ -200,12 +200,8 @@ module OpzWorks
             hash[:command]  = { name: 'update_custom_cookbooks' }
 
             begin
-              if command_options[:rolling]
-                rolling_deployment(opsworks, hash)
-              else
-                resp = opsworks.create_deployment(hash)
-                deployment_id = resp.deployment_id
-              end
+              resp = opsworks.create_deployment(hash)
+              deployment_id = resp.deployment_id
             rescue Aws::OpsWorks::Errors::ServiceError => e
               STDERR.puts "\tCaught error while attempting to trigger deployment: ".foreground(:red)
               STDERR.puts "\t\t#{e}"

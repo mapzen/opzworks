@@ -1,4 +1,4 @@
-def wait_for_deployment opsworks, id, max_minutes = 10
+def wait_for_deployment opsworks, id, max_minutes = 30
 
   minutes_passed = 0
   poison = false

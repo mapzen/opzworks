@@ -61,6 +61,23 @@ module OpzWorks
               command_options[:merge_method],
               command_options[:tag_version]
             )
+          end
+
+          if command_options[:to_branch] && command_options[:from_branch]
+            # This pulls and merges the from_ & to_branches with merge_method, runs the deployment_script, tags the version and pushes to to_branch
+            git_merge(
+              config.app_path,
+              command_options[:from_branch],
+              command_options[:to_branch],
+              command_options[:merge_method],
+              command_options[:tag_version],
+              command_options[:environment],
+              command_options[:deployment_script]
+            )
+          end
+
+          # This calls opzworks berks...
+          if command_options[:from_branch_chef] && command_options[:to_branch_chef]
             rolling = command_options[:rolling] ? '-r' : ''
             STDERR.puts 'Starting chef setup'.foreground(:blue)
             cmd = "opzworks berks -b #{command_options[:to_branch_chef]} -c -s #{rolling} -y 'true' #{stack}"
@@ -75,19 +92,8 @@ module OpzWorks
           end
 
           if command_options[:to_branch] && command_options[:from_branch]
-
             # Now deploy the app itselfs
             STDERR.puts 'Starting app deployment'.foreground(:blue)
-            # This pulls and merges the from_ & to_branches with merge_method, runs the deployment_script, tags the version and pushes to to_branch
-            git_merge(
-              config.app_path,
-              command_options[:from_branch],
-              command_options[:to_branch],
-              command_options[:merge_method],
-              command_options[:tag_version],
-              command_options[:environment],
-              command_options[:deployment_script]
-            )
 
             abort("Please specify an app id for environment #{command_options[:environment]} on stack #{stack}".foreground(:red)) unless config.aws_app_id
 

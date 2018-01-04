@@ -44,7 +44,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'json', '~> 1.8'
   spec.add_dependency 'berkshelf-api-client'
   spec.add_dependency 'cleanroom'
-  spec.add_dependency 'minitar', '~> 0.5.4'
+  spec.add_dependency 'minitar', '>= 0.6.1'
   spec.add_dependency 'mixlib-archive', '~> 0.2.0'
   spec.add_dependency 'octokit', '~> 4.6'
   spec.add_dependency 'sawyer', '~> 0.8'

@@ -150,7 +150,7 @@ module OpzWorks
 
       result = Trollop::Subcommands::parse!
 
-      abort('Please specify the stack you want to adress'.foreground(:red)) if ARGV.empty?
+      abort('Please specify the stack you want to address'.foreground(:red)) if ARGV.empty?
 
       if result.subcommand == 'berks'
         if !result.subcommand_options[:remote_branch_given] && !result.subcommand_options[:local_branch_given]

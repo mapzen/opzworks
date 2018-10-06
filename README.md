@@ -41,7 +41,7 @@ Generate and update SSH configuration files, or alternatively return a list of I
 
 Perform [start|stop|bounce|rolling] operations on an Elastic cluster.
 
-The host from which this command is originated will need to have access to the the target
+The host from which this command is originated will need to have access to the target
 systems via private IP and assumes port 9200 is open and available.
 
 This is a very rough implementation!

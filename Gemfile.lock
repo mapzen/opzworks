@@ -96,7 +96,7 @@ GEM
     httpclient (2.8.2.4)
     inifile (3.0.0)
     jmespath (1.4.0)
-    json (1.8.6)
+    json (2.1.0)
     minitar (0.9)
     mixlib-archive (0.2.0)
       mixlib-log

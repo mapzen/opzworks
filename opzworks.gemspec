@@ -41,7 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'hashie', '~> 3.4.6'
   spec.add_dependency 'nio4r', '~> 2'
   spec.add_dependency 'chef-config', '~> 12.16.42'
-  spec.add_dependency 'json', '~> 1.8'
+  spec.add_dependency 'json', '~> 2.1'
   spec.add_dependency 'berkshelf-api-client'
   spec.add_dependency 'cleanroom'
   spec.add_dependency 'minitar', '>= 0.6.1'

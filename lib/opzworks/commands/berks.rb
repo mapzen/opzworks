@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require 'aws-sdk'
+require 'aws-sdk-opsworks'
+require 'aws-sdk-s3'
 require 'trollop'
 require 'opzworks'
 require 'rainbow/ext/string'

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module OpzWorks
-  VERSION     = '0.13.0.4'
+  VERSION     = '0.13.0.5'
   AUTHORS     = ['Grant Heffernan', 'Mapzen'].freeze
   EMAIL       = ['grant@mapzen.com'].freeze
   DESCRIPTION = 'OpzWorks Utilities'

@@ -26,7 +26,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'aws-sdk', '~> 2.7'
+  spec.add_dependency 'aws-sdk-s3', '~> 1.88', '>= 1.88.1'
+  spec.add_dependency 'aws-sdk-opsworks', '~> 1.31'
   spec.add_dependency 'trollop', '~> 2.0'
   spec.add_dependency 'trollop-subcommands'
   spec.add_dependency 'inifile', '~> 3.0.0'

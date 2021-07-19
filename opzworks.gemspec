@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday', '~> 0.9'
   spec.add_dependency 'net-ssh', '~> 3.0.2'
   spec.add_dependency 'net-ssh-multi', '~> 1.2.1'
-  spec.add_dependency 'addressable', '~> 2.5.0'
+  spec.add_dependency 'addressable', '~> 2.8.0'
   spec.add_dependency 'public_suffix', '~> 2.0.4'
   spec.add_dependency 'httpclient', '~> 2.8.2.4'
   spec.add_dependency 'hashie', '~> 3.4.6'
